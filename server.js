@@ -40,8 +40,10 @@
 // const PORT = 4242;
 // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
+require('dotenv').config();
+
 const express = require('express');
-const stripe = require('stripe')('sk_test_51QOg4EDhFaA8J4k38Ni1UUnxzagSjRGrZZQcagm7CTQW7ERiWmc3AYuFDsJ6tPY5ywBv2mwgNmmSQ1ovtlsf84UO00WyOXvE8T');
+const stripe = require('stripe')(process.env.STRIPE_TEST_KEY);
 const app = express();
 
 app.use(express.json());
