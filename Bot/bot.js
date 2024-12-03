@@ -1,7 +1,10 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 const { Telegraf } = require('telegraf');
 const axios = require('axios');
 
-const bot = new Telegraf(TOKEN);
+const bot = new Telegraf(process.env.TOKEN);
 const web_link = 'https://dancing-fox-b4fa82.netlify.app/';
 
 const availableSlots = [
