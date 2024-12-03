@@ -1,5 +1,4 @@
-import dotenv from "dotenv";
-dotenv.config();
+require('dotenv').config();
 
 const { Telegraf } = require('telegraf');
 const axios = require('axios');
