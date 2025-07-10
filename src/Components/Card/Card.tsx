@@ -2,10 +2,20 @@ import React, {useState} from 'react'
 import './Card.css'
 import Button from "../Button/Button";
 
-function Card({food, onAdd, onRemove}) {
+
+interface Product {
+    product: {
+        title: string;
+        Image: string;
+        price: number;
+        id: number;
+    };
+};
+
+function Card({product}: Product}) {
     const [count, setCount] = useState(0);
 
-    const {title, Image, price, id } = food;
+    const {title, Image, price, id } = product;
 
     const handleIncrement = () => {
         setCount(count+1);
