@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
 import './Card.css'
-import Button from "../Button/Button";
 
 
 interface Product {
@@ -12,19 +11,21 @@ interface Product {
     };
 };
 
-function Card({product}: Product}) {
+function Card({product}: Product) {
     const [count, setCount] = useState(0);
 
     const {title, Image, price, id } = product;
 
-    const handleIncrement = () => {
-        setCount(count+1);
-        onAdd(food);
-    };
-    const handleDecrement = () => {
-        setCount(count-1);
-        onRemove(food);
-    };
+    // const handleIncrement = () => {
+    //     setCount(count+1);
+    //     onAdd(food);
+    // };
+    // const handleDecrement = () => {
+    //     setCount(count-1);
+    //     onRemove(food);
+    // };
+
+  }
   return (
     <a href="#" class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow-sm md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
     <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" src="/docs/images/blog/image-4.jpg" alt="">
