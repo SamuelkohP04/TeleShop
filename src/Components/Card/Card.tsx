@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Col, Row } from 'react-bootstrap'; 
 import Card from 'react-bootstrap/Card';// ← All imports at top
-import "./Card.css";
+// import "./Card.css";
+import Button from 'react-bootstrap/Button';
 
 interface Product {
   product: {
@@ -12,27 +13,32 @@ interface Product {
   };
 }
 
-
-function GridExample() {
+function ProductCard({ product: Product }) {
+  const { title, Image, price, id } = Product;
+  
   return (
-    <Row xs={1} md={2} className="g-4">
-      {Array.from({ length: 4 }).map((_, idx) => (
-        <Col key={idx}>
-          <Card>
-            <Card.Img variant="top" src="holder.js/100px160" />
-            <Card.Body>
-              <Card.Title>Card title</Card.Title>
-              <Card.Text>
-                This is a longer card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-      ))}
-    </Row>
-  );
+    <div className="w-full max-w-md mx-auto">
+      <div className="bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl 
+      dark:bg-gray-950 ">
+        <div className="flex-1 overflow-hidden">
+        <img
+          src={Image}
+          alt="Product Image"
+          width={600}
+          height={600}
+          className="w-full h-full object-cover"
+          style={{ aspectRatio: "600/600", objectFit: "cover" }}
+        />
+        </div>
+        <div className="p-4 space-y-2">
+          <h4 className="text-xl font-semibold">{title}</h4>
+          <h2 className="text-lg text-gray-700 dark:text-gray-300">{price}</h2>
+          {/* <p className="text-gray-500 dark:text-gray-400">{developer.description}</p> */}
+
+        </div>
+      </div>
+    </div>
+  )
 }
 
-export default GridExample;
+export default ProductCard;

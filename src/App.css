@@ -1,6 +1,6 @@
 body{
-  background-color: rgb(19,19,52);
-  color: white;
+  background-color: white;
+  color: black;
 }
 .cards__container{
   display: flex;
