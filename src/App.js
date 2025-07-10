@@ -47,14 +47,17 @@ function App() {
   // }
 
   return (
-    <>
+     <div className="relative bg-black/20">
     <h1 className='heading'>Book a Tarot Card Consultation</h1>
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-10">
     {/* <Cart cartItems={cartItems} onCheckout={onCheckout}/> */}
-    <div className='cards__container'>
+    <div className='flex flex-col items-center text-center'>
       {products.map(product => { return <Card product={product} key={product.id} />})}
     </div>
     
-    </>
+    </div>
+    </div>
   );
 }
 
