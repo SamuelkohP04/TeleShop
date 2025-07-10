@@ -1,6 +1,6 @@
-import tarot_card_img from "/public/product-images/CuteTarotReader.jpg"
-import numerology_img from "/public/product-images/CoolNumberBoy.jpg"
-import tarot_card_numerology_img from "/public/product-images/TarotAndNumerology.jpg"
+import tarot_card_img from "../product-images/CuteTarotReader.jpg"
+import numerology_img from "../product-images/CoolNumberBoy.jpg"
+import tarot_card_numerology_img from "../product-images/TarotAndNumerlogy.jpg"
 
 
 export function getData(){
