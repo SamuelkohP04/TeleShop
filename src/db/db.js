@@ -5,9 +5,9 @@ import roseWoodIncenseBurner from "../images/rose wood incense burner.jpg"
 
 export function getData(){
     return [
-        {title: "PiXiu 貔貅", price: 80, Image: pixiuImg,id:1},
-        {title: "Incense Burner (倒流香)", price: 40, Image: incenseBurnerImg,id:2},
-        {title: "Rose Wood Incense Burner", price: 88, Image: roseWoodIncenseBurner,id:3},
+        {title: "Tarot Card Session", price: 68, Image: pixiuImg,id:1},
+        {title: "Numerology", price: 68, Image: incenseBurnerImg,id:2},
+        {title: "Tarot Card + Numerology", price: 118, Image: roseWoodIncenseBurner,id:3},
     ]
 }
 
