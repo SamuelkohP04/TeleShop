@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Col, Row } from 'react-bootstrap'; 
+import Card from 'react-bootstrap/Card';// ← All imports at top
 import "./Card.css";
 
 interface Product {
@@ -10,41 +12,27 @@ interface Product {
   };
 }
 
-export default function Card({ product }: Product) {
-  const [count, setCount] = useState(0);
 
-  const { title, Image, price, id } = product;
-
-  // const handleIncrement = () => {
-  //     setCount(count+1);
-  //     onAdd(food);
-  // };
-  // const handleDecrement = () => {
-  //     setCount(count-1);
-  //     onRemove(food);
-  // };
-
+function GridExample() {
   return (
-    <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-      <a
-        href="#"
-        className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow-sm md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-      >
-        <img
-          className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
-          src="/docs/images/blog/image-4.jpg"
-          alt=""
-        />
-        <div className="flex flex-col justify-between p-4 leading-normal">
-          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {title}
-          </h5>
-          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-            Here are the biggest enterprise technology acquisitions of 2021 so
-            far, in reverse chronological order.
-          </p>
-        </div>
-      </a>
-    </div>
+    <Row xs={1} md={2} className="g-4">
+      {Array.from({ length: 4 }).map((_, idx) => (
+        <Col key={idx}>
+          <Card>
+            <Card.Img variant="top" src="holder.js/100px160" />
+            <Card.Body>
+              <Card.Title>Card title</Card.Title>
+              <Card.Text>
+                This is a longer card with supporting text below as a natural
+                lead-in to additional content. This content is a little bit
+                longer.
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+      ))}
+    </Row>
   );
 }
+
+export default GridExample;
