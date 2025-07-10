@@ -1,13 +1,13 @@
-import pixiuImg from "../images/pixiu.jpg"
-import incenseBurnerImg from "../images/incense burner.jpg"
-import roseWoodIncenseBurner from "../images/rose wood incense burner.jpg"
+import tarot_card_img from "/public/product-images/CuteTarotReader.jpg"
+import numerology_img from "/public/product-images/CoolNumberBoy.jpg"
+import tarot_card_numerology_img from "/public/product-images/TarotAndNumerology.jpg"
 
 
 export function getData(){
     return [
-        {title: "Tarot Card Session", price: 68, Image: pixiuImg,id:1},
-        {title: "Numerology", price: 68, Image: incenseBurnerImg,id:2},
-        {title: "Tarot Card + Numerology", price: 118, Image: roseWoodIncenseBurner,id:3},
+        {title: "Tarot Card Session", price: 68, Image: tarot_card_img,id:1},
+        {title: "Numerology", price: 68, Image: numerology_img,id:2},
+        {title: "Tarot Card + Numerology", price: 118, Image: tarot_card_numerology_img,id:3},
     ]
 }
 
