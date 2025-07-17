@@ -5,12 +5,6 @@ import Card, { ProductProps } from './Components/Card/Card'
 const { getData } = require("./db/db.js");
 const products = getData();
 
-// declare global {
-//   interface Window {
-//     Telegram: any;
-//     tele: any;
-//   }
-// }
 const tele = window.Telegram.WebApp
 
 function App() {
