@@ -11,7 +11,7 @@ import Card from 'react-bootstrap/Card';// ← All imports at top
 import Button from 'react-bootstrap/Button';
 
 
-interface Product {
+interface ProductProps {
   product: {
     title: string;
     Image: string;
@@ -20,8 +20,8 @@ interface Product {
   };
 }
 
-function ProductCard({ product: Product }) {
-  const { title, Image, price, id } = Product;
+function ProductCard({ product }: ProductProps ) {
+  const { title, Image, price, id } = product;
   
   return (
     <div className="w-full max-w-md mx-auto">
