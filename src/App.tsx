@@ -1,9 +1,16 @@
 import './App.css';
 import React, {useState, useEffect} from 'react'
 import Card from './Components/Card/Card.tsx'
-import Cart from './Components/Cart/Cart'
-const { getData } = require("./db/db");
+import Cart from './Components/Cart/Cart.jsx'
+const { getData } = require("./db/db.js");
 const products = getData();
+
+declare global {
+  interface Window {
+    Telegram: any;
+    tele: any;
+  }
+}
 const tele = window.Telegram.WebApp
 
 function App() {
@@ -48,6 +55,8 @@ function App() {
 
   return (
      <div className="relative bg-black/20">
+
+      <div className="max-w-6xl mx-auto">
     <h1 className='heading'>Book a Tarot Card Consultation</h1>
 
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-10">
@@ -56,6 +65,7 @@ function App() {
       {products.map(product => { return <Card product={product} key={product.id} />})}
     </div>
     
+    </div>
     </div>
     </div>
   );

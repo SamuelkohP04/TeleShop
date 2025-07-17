@@ -1,8 +1,15 @@
+/**
+ * v0 by Vercel.
+ * @see https://v0.dev/t/jvOgkyh3xyN
+ * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
+ */
+
 import React, { useState } from "react";
 import { Col, Row } from 'react-bootstrap'; 
 import Card from 'react-bootstrap/Card';// ← All imports at top
 // import "./Card.css";
 import Button from 'react-bootstrap/Button';
+
 
 interface Product {
   product: {
