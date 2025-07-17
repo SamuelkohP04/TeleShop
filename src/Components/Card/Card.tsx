@@ -11,7 +11,7 @@ import Card from 'react-bootstrap/Card';// ← All imports at top
 import Button from 'react-bootstrap/Button';
 
 
-interface ProductProps {
+export interface ProductProps {
   product: {
     title: string;
     Image: string;

@@ -1,6 +1,6 @@
 import './App.css';
 import React, {useState, useEffect} from 'react'
-import Card from './Components/Card/Card.tsx'
+import Card, { ProductProps } from './Components/Card/Card'
 // import Cart from './Components/Cart/Cart.jsx'
 const { getData } = require("./db/db.js");
 const products = getData();
@@ -62,9 +62,9 @@ function App() {
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-10">
     {/* <Cart cartItems={cartItems} onCheckout={onCheckout}/> */}
     <div className='flex flex-col items-center text-center'>
-      {products.map(product => { return <Card product={product} key={product.id} />})}
+      {products.map((product: ProductProps) => { return <Card {...product} />})}
     </div>
-    
+     
     </div>
     </div>
     </div>
