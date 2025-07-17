@@ -1,7 +1,7 @@
 import './App.css';
 import React, {useState, useEffect} from 'react'
 import Card from './Components/Card/Card.tsx'
-import Cart from './Components/Cart/Cart.jsx'
+// import Cart from './Components/Cart/Cart.jsx'
 const { getData } = require("./db/db.js");
 const products = getData();
 
