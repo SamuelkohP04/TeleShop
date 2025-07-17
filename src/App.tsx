@@ -5,12 +5,12 @@ import Cart from './Components/Cart/Cart.jsx'
 const { getData } = require("./db/db.js");
 const products = getData();
 
-declare global {
-  interface Window {
-    Telegram: any;
-    tele: any;
-  }
-}
+// declare global {
+//   interface Window {
+//     Telegram: any;
+//     tele: any;
+//   }
+// }
 const tele = window.Telegram.WebApp
 
 function App() {
