@@ -2,7 +2,7 @@ import './App.css';
 import React, {useState, useEffect} from 'react'
 import Card, { ProductProps } from './Components/Card/Card'
 // import Cart from './Components/Cart/Cart.jsx'
-const { getData } = require("./db/db.js");
+const { getData } = require("./db/db.ts");
 const products = getData();
 
 const tele = window.Telegram.WebApp
