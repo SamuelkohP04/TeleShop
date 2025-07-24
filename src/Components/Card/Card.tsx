@@ -12,6 +12,7 @@ import Button from 'react-bootstrap/Button';
 
 
 export interface ProductProps {
+  price: number;
   product: {
     title: string;
     Image: string;
