@@ -12,7 +12,7 @@ const bot = new Telegraf(BOT_TOKEN)
 
 // Start command
 bot.start((ctx) => {
-  ctx.reply('Welcometo AwarenessAI Scheduler! Introducing a Tarot card/Numerology reading service, a session to consult about your life. This aims to guide you to chart out your life.');
+  ctx.reply('Welcome to AwarenessAI Scheduler! Introducing a Tarot card/Numerology reading service, a session to consult about your life. This aims to guide you to chart out your life.');
   ctx.reply(
     `Need guidance in decision making for business, career, studies, relationships, etc.? Tarot Card Reading guides you to find direction, clarity, love, truth & insights to face your difficulties. 
 
