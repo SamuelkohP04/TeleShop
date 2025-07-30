@@ -7,6 +7,14 @@ const products = getData();
 
 const tele = window.Telegram.WebApp
 
+declare global {
+  interface Window {
+    Telegram: any;
+    tele: any;
+  }
+}
+
+
 function App() {
 
   const [cartItems, setCartItems] = useState([]);
