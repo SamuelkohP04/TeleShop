@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start:bot": "ts-node bot/bot.ts",
+    "start:bot": "ts-node src/bot.ts",
     "start:web": "next start",
     "dev": "next dev",
     "dev:react-scripts": "react-scripts start",
