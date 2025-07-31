@@ -12,13 +12,26 @@ const bot = new Telegraf(BOT_TOKEN)
 
 // Start command
 bot.start((ctx) => {
-  ctx.reply('Welcome to AwarenessAI Scheduler! Introducing a Tarot card/Numerology reading service, a session to consult about your life. This aims to guide you to chart out your life.');
   ctx.reply(
-    `Need guidance in decision making for business, career, studies, relationships, etc.? Tarot Card Reading guides you to find direction, clarity, love, truth & insights to face your difficulties. 
+    '*🌟 Welcome to AwarenessAI Scheduler\\!*\n\n' +
+      'Introducing a Tarot card/Numerology reading service, a session to consult about your life\\. This aims to guide you to chart out your life\\.',
+    {
+      parse_mode: 'MarkdownV2',
+    }
+  );
+  ctx.reply(
+    '*🌟 Need guidance in decision making for business, career, studies, relationships, etc\\.\\?* \n' +
+    'Tarot Card Reading guides you to find direction, clarity, love, truth & insights ' +
+    'to face your difficulties\\. \n\n' +
 
-  Do you know what is your personal strength, weaknesses, opportunities & threats (SWOT)? numerology helps you decode your hidden powers, personality traits and life challenges through a series of numbers derived from your date of birth. 
+  '*💡 Do you know what is your personal strength, weaknesses, opportunities & threats \\(SWOT\\)\\?* \n' +
+  'Numerology helps you decode your hidden powers, personality traits and life challenges through a series of numbers derived from your date of birth\\. \n\n' +
 
-  The telegram bot, AwarenessAI, helps to automate booking your next consulting session. What is your name?`,
+  'Meet AwarenessAI, your Telegram bot assistant\\! I help to automate booking your next consulting session with ease\\. \n\n' +
+  '📌 What is your name\\?',
+  {
+    parse_mode: 'MarkdownV2',
+  }
   )
 });
 
