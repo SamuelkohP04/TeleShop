@@ -33,7 +33,7 @@ bot.on(message('text'), async (ctx) => {
           {
             text: 'Yes, take me there!',
             web_app: {
-              url: 'https://your-mini-app-url.com/' // Replace with your actual web app URL
+              url: 'https://p6zlt81q-3000.asse.devtunnels.ms/login' // Replace with your actual web app URL
             }
           },
           {
