@@ -1,4 +1,0 @@
-# Telegram bot messages
-welcome: "👋 Welcome, {name}! Type /help for options."
-help: "📖 Available commands:\n- /start\n- /settings"
-error: "❌ Oops, something went wrong."
