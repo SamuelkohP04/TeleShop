@@ -20,12 +20,12 @@ const HeroSection = () => {
           </p>
 
           <Link
-            href="#book"
+            href="https://web.telegram.org/k/#@AwarenessSchedulerBot"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex mt-5 items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 sm:px-20 py-3 rounded-xl font-medium text-lg mb-6 duration-300 transition-colors"
           >
-            Book&nbsp;Now
+            Book&nbsp;Using&nbsp;Telegram&nbsp;Bot
             <svg
               viewBox="0 0 24 24"
               fill="none"
