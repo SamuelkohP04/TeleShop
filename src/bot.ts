@@ -39,18 +39,18 @@ bot.start((ctx) => {
 bot.on(message('text'), async (ctx) => {
   const name = ctx.message.text;
 
-  await ctx.reply(`Nice to meet you, ${name}! Would you like to book a session now?`, {
+  await ctx.reply(`👋 Nice to meet you, ${name}! Would you like to book a session now?`, {
     reply_markup: {
       inline_keyboard: [
         [
           {
-            text: 'Yes, take me there!',
+            text: '✅ Yes, take me there!',
             web_app: {
               url: 'https://p6zlt81q-3000.asse.devtunnels.ms/login' // Replace with your actual web app URL
             }
           },
           {
-            text: 'Nope, not for now!',
+            text: '❌ Nope, not for now!',
             callback_data: 'no',
           },
   
@@ -62,7 +62,7 @@ bot.on(message('text'), async (ctx) => {
 
 bot.action('no', async (ctx) => {
   await ctx.answerCbQuery();
-  await ctx.reply('No worries! You can book a session anytime by sending /start.');
+  await ctx.reply('😊 No worries! You can book a session anytime by sending /start.');
 });
 
 // Help command
