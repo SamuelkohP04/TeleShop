@@ -13,7 +13,7 @@ const bot = new Telegraf(BOT_TOKEN)
 // Start command
 bot.start((ctx) => {
   ctx.reply(
-    '*🌟 Welcome to AwarenessAI Scheduler\\!*\n\n' +
+    '*🌟 Welcome to using Awareness Scheduler by Awareness Living\\!*\n\n' +
       'Introducing a Tarot card/Numerology reading service, a session to consult about your life\\. This aims to guide you to chart out your life\\.',
     {
       parse_mode: 'MarkdownV2',
@@ -37,11 +37,15 @@ bot.start((ctx) => {
 
 // Help command
 bot.help((ctx) => {
-  ctx.reply(`
-    Available commands:
-    /start - Start the bot
-    /help - Show this help message
-    `);
+  ctx.reply(
+    '🤖 *Awareness scheduler at your service\\!*\n\n' +
+    '*🌟 /start* \\- Begin your journey with scheduling a Tarot or Numerology reading session \n' +
+    '*💡 /help* \\- Show this help message\n' +
+    '*📅 /book* \\- Book a session with AwarenessAI\n' +
+    'I am here to guide you with clarity and insights\\! Let us chart your path forward\\.',
+  {
+    parse_mode: 'MarkdownV2',
+  });
 });
 
 // Handle user reply with name (after /start)
