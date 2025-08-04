@@ -48,6 +48,28 @@ bot.help((ctx) => {
   });
 });
 
+bot.command('book', (ctx) => {
+  ctx.reply('📅 *Ready to book a session?*\n\n', {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          {
+            text: '✅ Yes, take me there!',
+            web_app: {
+              url: 'https://p6zlt81q-3000.asse.devtunnels.ms/login'
+            }
+          },
+          {
+            text: '❌ Nope, not for now!',
+            callback_data: 'no',
+          },
+        ],
+      ],
+    },
+    parse_mode: 'MarkdownV2',
+  });
+});
+
 // Handle user reply with name (after /start)
 bot.on(message('text'), async (ctx) => {
   const name = ctx.message.text;
