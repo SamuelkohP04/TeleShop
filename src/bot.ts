@@ -35,6 +35,15 @@ bot.start((ctx) => {
   )
 });
 
+// Help command
+bot.help((ctx) => {
+  ctx.reply(`
+    Available commands:
+    /start - Start the bot
+    /help - Show this help message
+    `);
+});
+
 // Handle user reply with name (after /start)
 bot.on(message('text'), async (ctx) => {
   const name = ctx.message.text;
@@ -63,15 +72,6 @@ bot.on(message('text'), async (ctx) => {
 bot.action('no', async (ctx) => {
   await ctx.answerCbQuery();
   await ctx.reply('😊 No worries! You can book a session anytime by sending /start.');
-});
-
-// Help command
-bot.help((ctx) => {
-  ctx.reply(`
-    Available commands:
-    /start - Start the bot
-    /help - Show this help message
-    `);
 });
 
 // Error handling
