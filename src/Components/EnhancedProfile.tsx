@@ -308,7 +308,15 @@ export default function EnhancedProfile() {
               </div>
             </div>
           </div>
-          {profile?.paymentPlan !== "premium" && (
+          {profile?.paymentPlan === "Enlightenment" ? (
+            <Button
+              disabled
+              className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg cursor-not-allowed opacity-60 transition-all duration-300"
+            >
+              <Crown className="h-4 w-4 mr-2" />
+              Ascended to Enlightenment
+            </Button>
+          ) : (
             <Button
               onClick={handleUpgrade}
               className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-lg hover:shadow-yellow-500/25 transition-all duration-300"
@@ -368,9 +376,9 @@ export default function EnhancedProfile() {
                 <nav className="space-y-2">
                   {[
                     { id: "profile", label: "Profile Info", icon: User },
-                    { id: "security", label: "Security", icon: Lock },
-                    { id: "notifications", label: "Notifications", icon: Bell },
-                    { id: "preferences", label: "Preferences", icon: Settings },
+                    { id: "security", label: "Security", icon: Lock, disabled: true },
+                    { id: "notifications", label: "Notifications", icon: Bell, disabled: true },
+                    { id: "preferences", label: "Preferences", icon: Settings, disabled: true },
                   ].map((tab) => (
                     <Button
                       key={tab.id}
@@ -380,7 +388,8 @@ export default function EnhancedProfile() {
                           ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
                           : "hover:bg-purple-50"
                       }`}
-                      onClick={() => setActiveTab(tab.id)}
+                      onClick={() => tab.disabled ? undefined : setActiveTab(tab.id)}
+                      disabled={tab.disabled}
                     >
                       <tab.icon className="w-4 h-4 mr-2" />
                       {tab.label}
@@ -582,6 +591,7 @@ export default function EnhancedProfile() {
                     <Button
                       variant="outline"
                       className="border-blue-300 text-blue-700 hover:bg-blue-100"
+                      disabled
                     >
                       Enable 2FA
                     </Button>
@@ -597,6 +607,7 @@ export default function EnhancedProfile() {
                     <Button
                       variant="outline"
                       className="border-yellow-300 text-yellow-700 hover:bg-yellow-100"
+                      disabled
                     >
                       Change Password
                     </Button>
@@ -622,7 +633,7 @@ export default function EnhancedProfile() {
                           Get notified when bookings are confirmed
                         </p>
                       </div>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" disabled>
                         Enable
                       </Button>
                     </div>
@@ -633,7 +644,7 @@ export default function EnhancedProfile() {
                           Receive updates about new services and offers
                         </p>
                       </div>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" disabled>
                         Disable
                       </Button>
                     </div>
@@ -655,20 +666,20 @@ export default function EnhancedProfile() {
                     <div className="p-4 bg-gray-50 rounded-lg">
                       <h4 className="font-medium mb-2">Theme Preference</h4>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" disabled>
                           Light
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" disabled>
                           Dark
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" disabled>
                           Auto
                         </Button>
                       </div>
                     </div>
                     <div className="p-4 bg-gray-50 rounded-lg">
                       <h4 className="font-medium mb-2">Language</h4>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" disabled>
                         English (US)
                       </Button>
                     </div>

@@ -25,37 +25,37 @@ import {
 const SERVICES = [
   {
     id: "tarot",
-    name: "Tarot Card Session",
-    description: "Discover insights about your future through ancient tarot wisdom",
-    duration: "60 minutes",
-    price: 40,
+    name: "Tarot Card",
+    description: "Tarot card reading session.",
+    duration: "45 minutes",
+    price: 68,
     popular: true,
     features: ["Personal guidance", "Future insights", "Spiritual clarity"]
   },
   {
     id: "numerology",
-    name: "Numerology Reading",
-    description: "Unlock the secrets hidden in your numbers and birth date",
+    name: "Numerology",
+    description: "Numerology reading session.",
     duration: "45 minutes", 
-    price: 35,
+    price: 68,
     popular: false,
     features: ["Life path analysis", "Personal numbers", "Destiny insights"]
   },
   {
     id: "combo",
-    name: "Tarot + Numerology Combo",
-    description: "Complete spiritual guidance combining both ancient arts",
-    duration: "90 minutes",
-    price: 65,
+    name: "Tarot Card + Numerology",
+    description: "Combined tarot card and numerology session.",
+    duration: "45 minutes",
+    price: 118,
     popular: true,
     features: ["Comprehensive reading", "Best value", "Complete guidance"]
   },
   {
-    id: "marriage",
-    name: "Marriage Auspicious Date",
-    description: "Find the perfect date for your special day using cosmic alignment",
-    duration: "30 minutes",
-    price: 50,
+    id: "wedding",
+    name: "Auspicious Wedding Date",
+    description: "Find an auspicious date for your wedding.",
+    duration: "45 minutes",
+    price: 88,
     popular: false,
     features: ["Date selection", "Cosmic alignment", "Blessing guidance"]
   }
@@ -73,6 +73,7 @@ const TIME_SLOTS = [
 export default function EnhancedBooking() {
   const [step, setStep] = useState(1);
   const [selectedService, setSelectedService] = useState<any>(null);
+  const [consultationType, setConsultationType] = useState<string>("online");
   const [date, setDate] = useState<Date | null>(null);
   const [timeSlot, setTimeSlot] = useState<string>("");
   const [remarks, setRemarks] = useState("");
@@ -95,6 +96,7 @@ export default function EnhancedBooking() {
         },
         body: JSON.stringify({
           service: selectedService.name,
+          consultationType,
           date: date ? date.toISOString() : null,
           timeSlot,
           remarks,
@@ -237,6 +239,31 @@ export default function EnhancedBooking() {
               exit={{ opacity: 0, x: -50 }}
               className="max-w-2xl mx-auto"
             >
+              <div className="mb-6">
+                <h3 className="font-semibold mb-2">Consultation Type</h3>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="consultationType"
+                      value="online"
+                      checked={consultationType === "online"}
+                      onChange={() => setConsultationType("online")}
+                    />
+                    Online
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="consultationType"
+                      value="physical"
+                      checked={consultationType === "physical"}
+                      onChange={() => setConsultationType("physical")}
+                    />
+                    Physical
+                  </label>
+                </div>
+              </div>
               <div className="text-center mb-8">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-2">Select Your Date</h2>
                 <p className="text-gray-600">Choose when you'd like to begin your spiritual journey</p>
@@ -385,6 +412,10 @@ export default function EnhancedBooking() {
                   <div className="flex justify-between">
                     <span>Time:</span>
                     <span className="font-semibold">{TIME_SLOTS.find(s => s.time === timeSlot)?.label}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Consultation Type:</span>
+                    <span className="font-semibold capitalize">{consultationType}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Duration:</span>

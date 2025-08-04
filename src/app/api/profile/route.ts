@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+
+// Minimal CORS header for demonstration
+export const OPTIONS = () => new NextResponse(null, { headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, PATCH, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type, Authorization' } });
 import { getFirestore } from "firebase-admin/firestore";
 import { adminAuth } from "@/lib/firebaseAdmin";
 
@@ -26,18 +29,27 @@ export async function PATCH(req: NextRequest) {
     if (!match) return NextResponse.json({ error: "No token provided" }, { status: 401 });
     const idToken = match[1];
     const decoded = await adminAuth.verifyIdToken(idToken);
+    if (!decoded.email_verified) return NextResponse.json({ error: "Email not verified" }, { status: 401 });
     const uid = decoded.uid;
     const body = await req.json();
     const { fullname, username, dob, phone } = body;
     const db = getFirestore();
     const updateData: any = {};
     if (fullname !== undefined) updateData.fullname = fullname;
-    if (username !== undefined) updateData.username = username;
+    if (username !== undefined) {
+      // Sanitize username (alphanumeric only)
+      if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+        return NextResponse.json({ error: "Invalid username" }, { status: 400 });
+      }
+      updateData.username = username;
+    }
     if (dob !== undefined) updateData.dob = dob ? new Date(dob) : null;
     if (phone !== undefined) updateData.phone = phone;
     await db.collection("users").doc(uid).update(updateData);
+    // Server-side logging
+    console.log(`[${new Date().toISOString()}] User ${uid} updated profile:`, Object.keys(updateData));
     return NextResponse.json(updateData, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 401 });
   }
-} 
+}

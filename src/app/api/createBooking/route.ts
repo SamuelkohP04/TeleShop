@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
     await db.collection("bookings").add({
       uid: meta.uid,
       service: meta.service,
+      consultationType: meta.consultationType || "online",
       date: meta.date,
       timeSlot: meta.timeSlot || "",
       remarks: meta.remarks || "",
@@ -30,4 +31,4 @@ export async function GET(req: NextRequest) {
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-} 
+}

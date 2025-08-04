@@ -417,7 +417,15 @@ export default function DashboardPage() {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            {profile?.paymentPlan !== "premium" && (
+            {profile?.paymentPlan === "Enlightenment" ? (
+              <Button
+                disabled
+                className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg cursor-not-allowed opacity-60 transition-all duration-300"
+              >
+                <Crown className="h-4 w-4 mr-2" />
+                Ascended to Enlightenment
+              </Button>
+            ) : (
               <Button
                 onClick={handleUpgrade}
                 className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-lg hover:shadow-yellow-500/25 transition-all duration-300"
@@ -576,7 +584,7 @@ export default function DashboardPage() {
                             return null;
                           }}
                           onClickDay={handleDateClick}
-                          className="bg-black/20 border border-purple-500/30 rounded-lg p-4 text-purple-300"
+                          className="bg-black/20 border border-purple-500/30 rounded-lg p-4 text-gray-900 dark:text-gray-100 calendar-dark-text"
                         />
                       )}
                     </div>

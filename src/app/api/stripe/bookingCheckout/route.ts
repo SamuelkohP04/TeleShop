@@ -16,6 +16,12 @@ export async function POST(req: NextRequest) {
     const uid = decoded.uid;
     const body = await req.json();
     const { service, date, timeSlot, remarks } = body;
+    // Determine price based on service
+    let unitAmount = 6800;
+    if (service === "Tarot Card") unitAmount = 6800;
+    else if (service === "Numerology") unitAmount = 6800;
+    else if (service === "Tarot Card + Numerology") unitAmount = 11800;
+    else if (service === "Auspicious Wedding Date") unitAmount = 8800;
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
@@ -27,7 +33,7 @@ export async function POST(req: NextRequest) {
               name: `Booking: ${service}`,
               description: remarks || undefined,
             },
-            unit_amount: 4000, // $40.00
+            unit_amount: unitAmount, // price in cents
           },
           quantity: 1,
         },

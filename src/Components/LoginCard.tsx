@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "./ui/input";
 import { auth } from "@/lib/firebaseClient";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { format } from "date-fns";
 
 type FormData = {
@@ -59,6 +59,16 @@ function LoginCard() {
         // LOGIN FLOW
         try {
           const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
+          // Check if email is verified
+          if (!userCredential.user.emailVerified) {
+            toast({
+              title: "Email Not Verified",
+              description: "Please verify your email before logging in.",
+              variant: "destructive",
+            });
+            await auth.signOut();
+            return;
+          }
           const idToken = await userCredential.user.getIdToken();
           // Fetch user profile from server
           const res = await fetch("/api/profile", {
@@ -91,8 +101,8 @@ function LoginCard() {
       } else {
         // REGISTER FLOW
         const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+        // Create Firestore user profile immediately after registration
         const idToken = await userCredential.user.getIdToken();
-        // Send profile data to server to create Firestore user
         const res = await fetch("/api/createProfile", {
           method: "POST",
           headers: {
@@ -111,7 +121,19 @@ function LoginCard() {
           const { error } = await res.json();
           throw new Error(error || "Unknown error");
         }
-        router.push("/dashboard");
+        // Send verification email using Firebase API
+        await auth.updateCurrentUser(userCredential.user);
+        await auth.currentUser?.reload();
+        await sendEmailVerification(userCredential.user);
+        toast({
+          title: "Verify Your Email",
+          description: "A verification email has been sent. Please check your inbox and verify before logging in.",
+          variant: "default",
+        });
+        // Sign out the user after registration
+        await auth.signOut();
+        setIsLogin(true); // Switch to login form
+        return;
       }
     } catch (err: any) {
       toast({

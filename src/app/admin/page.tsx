@@ -352,6 +352,21 @@ export default function AdminDashboard() {
                   <div className="flex justify-center mb-6">
                     <div className="mystical-calendar min-h-[320px] flex items-center justify-center">
                       <Calendar
+                        onChange={setSelectedDate}
+                        value={selectedDate}
+                        tileClassName={({ date, view }) => {
+                          const isToday =
+                            date.toDateString() === new Date().toDateString();
+                          const hasBookings =
+                            getBookingsForDate(date).length > 0;
+                          return [
+                            isToday ? "bg-purple-100 dark:bg-purple-800" : "",
+                            hasBookings ? "border-2 border-purple-400" : "",
+                            "text-gray-900 dark:text-gray-100 calendar-dark-text",
+                          ]
+                            .filter(Boolean)
+                            .join(" ");
+                        }}
                         tileContent={({ date, view }) => {
                           if (view === "month") {
                             const count = getBookingsForDate(date).length;
