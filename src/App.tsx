@@ -1,11 +1,11 @@
-import './App.css';
-import React, {useState, useEffect} from 'react'
-import Card, { ProductProps } from './Components/Card/Card'
+import "./App.css";
+import React, { useState, useEffect } from "react";
+import Card, { ProductProps } from "./components/Card/Card";
 // import Cart from './Components/Cart/Cart.jsx'
 const { getData } = require("./db/db.js");
 const products = getData();
 
-const tele = window.Telegram.WebApp
+const tele = window.Telegram.WebApp;
 
 declare global {
   interface Window {
@@ -14,14 +14,12 @@ declare global {
   }
 }
 
-
 function App() {
-
   const [cartItems, setCartItems] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     tele.ready();
-  })
+  });
 
   // const onAdd = (food) => {
   //   const exist = cartItems.find((x) => x.id === food.id);
@@ -56,19 +54,19 @@ function App() {
   // }
 
   return (
-     <div className="relative bg-black/20">
-
+    <div className="relative bg-black/20">
       <div className="max-w-6xl mx-auto">
-    <h1 className='heading'>Book a Tarot Card Consultation</h1>
+        <h1 className="heading">Book a Tarot Card Consultation</h1>
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-10">
-    {/* <Cart cartItems={cartItems} onCheckout={onCheckout}/> */}
-    <div className='flex flex-col items-center text-center'>
-      {products.map((product: ProductProps) => { return <Card {...product} />})}
-    </div>
-     
-    </div>
-    </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-10">
+          {/* <Cart cartItems={cartItems} onCheckout={onCheckout}/> */}
+          <div className="flex flex-col items-center text-center">
+            {products.map((product: ProductProps) => {
+              return <Card {...product} />;
+            })}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
