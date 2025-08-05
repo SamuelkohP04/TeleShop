@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { adminAuth } from "@/lib/firebaseAdmin";
 import Stripe from "stripe";
+import validator from "validator";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2023-08-16",
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+if (!stripeSecretKey) {
+  throw new Error("STRIPE_SECRET_KEY is not set in environment variables");
+}
+const stripe = new Stripe(stripeSecretKey, {
+  apiVersion: "2025-06-30.basil",
 });
 
 export async function POST(req: NextRequest) {
@@ -16,6 +21,7 @@ export async function POST(req: NextRequest) {
     const uid = decoded.uid;
     const body = await req.json();
     const { service, date, timeSlot, remarks } = body;
+    const sanitizedRemarks = validator.escape(String(remarks || ""));
     // Determine price based on service
     let unitAmount = 6800;
     if (service === "Tarot Card") unitAmount = 6800;
@@ -42,14 +48,17 @@ export async function POST(req: NextRequest) {
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/book?cancel=1`,
       metadata: {
         uid,
+        remarks: sanitizedRemarks,
         service,
         date,
         timeSlot,
-        remarks,
       },
     });
     return NextResponse.json({ url: session.url }, { status: 200 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 401 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ error: "Unknown error" }, { status: 500 });
   }
-} 
+}

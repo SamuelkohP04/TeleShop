@@ -266,7 +266,7 @@ export default function EnhancedBooking() {
               </div>
               <div className="text-center mb-8">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-2">Select Your Date</h2>
-                <p className="text-gray-600">Choose when you'd like to begin your spiritual journey</p>
+                <p className="text-gray-600">Choose when you&apos;d like to begin your spiritual journey</p>
               </div>
               
               <Card className="p-6">

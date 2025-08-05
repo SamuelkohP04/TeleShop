@@ -12,7 +12,7 @@ export default function BookingSuccessPage() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const sessionId = searchParams.get("session_id");
+    const sessionId = searchParams?.get("session_id");
     if (!sessionId) {
       setError("No session ID provided");
       setLoading(false);

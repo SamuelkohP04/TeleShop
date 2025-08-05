@@ -302,7 +302,7 @@ export default function AdminDashboard() {
                   <Clock className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-green-300 mb-2">
-                  Today's Sessions
+                  Today&apos;s Sessions
                 </h3>
                 <p className="text-3xl font-bold text-white">
                   {getBookingsForDate(new Date()).length}
@@ -352,7 +352,13 @@ export default function AdminDashboard() {
                   <div className="flex justify-center mb-6">
                     <div className="mystical-calendar min-h-[320px] flex items-center justify-center">
                       <Calendar
-                        onChange={setSelectedDate}
+                        onChange={(value) => {
+                          if (Array.isArray(value)) {
+                            setSelectedDate(value[0] ?? null);
+                          } else {
+                            setSelectedDate(value);
+                          }
+                        }}
                         value={selectedDate}
                         tileClassName={({ date, view }) => {
                           const isToday =
