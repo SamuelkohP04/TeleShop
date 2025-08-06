@@ -1,4 +1,4 @@
-interface Product {
+export interface Product {
     id: string;
     cat: string;
     name: string;

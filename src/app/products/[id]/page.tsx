@@ -17,7 +17,10 @@ function ProductsId() {
     const router = useRouter();
     const params = useParams();
     const { toast } = useToast();
-    const product: Product = products.filter((product: Product) => product.id === params.id)[0];
+    
+    const product: Product | undefined = params?.id
+  ? products.find((product: Product) => product.id === params.id)
+  : undefined;
 
     useEffect(() => {
         setProducts([{ id: "1", cat: "Crystal", name: "crystal1", desc: "this is a crystal", image: "/crystal1.png", images: [], price: 10.2, amount: 1 }, { id: "2", cat: "Statue", name: "PiXiu 貔貅", desc: "Golden Lion Statue", image: "/lion1.png", images: [], price: 10.2, amount: 1 }, { id: "3", cat: "Incense", name: "Incense Burner (倒流香)", desc: "Incense Burner", image: "/incense1.png", images: [], price: 10.2, amount: 1 }, { id: "4", cat: "Incense", name: "Rose Wood Incense Burner", desc: "Rose Wood Incense Burner", image: "/incense3.png", images: [], price: 10.2, amount: 1 }]);
@@ -29,16 +32,19 @@ function ProductsId() {
 
     function handleAddCart(e: any): void {
         e.stopPropagation();
-
+    
+        if (!product) return; // <- ✅ guard clause
+    
         if (auth.currentUser) {
-            if (cart.some((cartProduct: Product) => cartProduct.id === product.id)) {
-                product.amount += 1;
+            const existingProduct = cart.find((cartProduct: Product) => cartProduct.id === product.id);
+            if (existingProduct) {
+                existingProduct.amount += 1;
                 setCart([...cart]);
                 toast({
-                    title: `Increased ${product.name} to ${product.amount}`
+                    title: `Increased ${product.name} to ${existingProduct.amount}`
                 });
             } else {
-                setCart((cart: Product[]) => [...cart, product]);
+                setCart((cart: Product[]) => [...cart, { ...product }]);
                 toast({
                     title: `Added ${product.name} to cart!`
                 });
@@ -47,7 +53,7 @@ function ProductsId() {
             router.push("/login");
         }
     }
-
+    
     if (product) {
         return (
             <>
@@ -63,7 +69,11 @@ function ProductsId() {
                                     );
                                 })}
                             </div>
-                            <img className="min-w-[83.333333%] bg-white rounded object-cover" src={productImage} />
+                            <img
+                                className="min-w-[83.333333%] bg-white rounded object-cover"
+                                src={productImage || "/placeholder.png"}
+                                alt="Product image"
+                            />
                         </div>
                         <div className="w-2/5 flex flex-col justify-between max-lg:w-full max-lg:gap-16">
                             <div className="flex flex-col gap-2">
