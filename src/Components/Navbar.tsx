@@ -27,6 +27,9 @@ import {
 } from "@/components/ui/sheet";
 import CartCard from "./CartCard";
 
+import { Product } from "../types";
+
+
 interface NavbarProps {
     cart: Product[];
     setCart: React.Dispatch<React.SetStateAction<Product[]>>;

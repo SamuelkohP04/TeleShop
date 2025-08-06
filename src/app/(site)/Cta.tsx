@@ -9,7 +9,7 @@ export default function CTA() {
           Book a consultation session now!
         </p>
         <a
-          href="#book"               /* update as needed */
+          href="/login"               /* update as needed */
           className="inline-flex items-center gap-2 rounded-lg bg-gray-200 px-6 py-3 text-base font-medium text-black transition-colors hover:bg-gray-200/90"
         >
           Book&nbsp;Now

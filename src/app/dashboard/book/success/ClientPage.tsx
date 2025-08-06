@@ -47,7 +47,7 @@ export default function BookingSuccessPage() {
         {success && !loading && (
           <>
             <h1 className="text-2xl font-bold mb-4">Booking Confirmed!</h1>
-            <p className="mb-6">Thank you for your booking. We look forward to seeing you!</p>
+            <p className="mb-6">Thank you for your booking. We will remain in contact with you through whatsapp. We look forward to seeing you!</p>
             <Button onClick={() => router.push("/dashboard")}>Back to Dashboard</Button>
           </>
         )}

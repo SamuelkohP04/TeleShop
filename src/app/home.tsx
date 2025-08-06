@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import ProductCard from "@/components/ProductCard";
+import { Product } from "../types";
+
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import {
     Select,

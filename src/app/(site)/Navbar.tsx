@@ -44,22 +44,22 @@ export default function Navbar() {
 
         <div className="hidden items-center gap-8 md:flex">
           <Link
-            href="#pricing"
+            href="/"
             className="text-base text-white/90 transition hover:text-white"
           >
             About
           </Link>
           <Link
-            href="#faq"
+            href="/membership"
             className="text-base text-white/90 transition hover:text-white"
           >
             Features
           </Link>
           <Link
-            href="/membership"
+            href="/faq"
             className="text-base text-white/90 transition hover:text-white"
           >
-            Membership
+            FAQ
           </Link>
         </div>
 
@@ -129,14 +129,14 @@ export default function Navbar() {
             className="text-base text-white/90 transition hover:text-white"
             onClick={toggleMenu}
           >
-            Features
+            Features (Membership info below)
           </Link>
           <Link
-            href="/membership"
+            href="/faq"
             className="text-base text-white/90 transition hover:text-white"
             onClick={toggleMenu}
           >
-            Membership
+            FAQ
           </Link>
           <a
             href="/login"

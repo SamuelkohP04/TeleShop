@@ -10,6 +10,9 @@ import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
+import { Product } from "../../../types";
+
+
 function ProductsId() {
     const [products, setProducts] = useState<Product[]>([]);
     const [cart, setCart] = useState<Product[]>([]);
