@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 
+import { Product } from "../../types";
+
 function Products() {
     const [products, setProducts] = useState<Product[]>([]);
     const [cart, setCart] = useState<Product[]>([]);
@@ -12,7 +14,12 @@ function Products() {
     let productList: Product[] = [];
 
     useEffect(() => {
-        setProducts([{ id: "1", cat: "Crystal", name: "crystal1", desc: "this is a crystal", image: "/crystal1.png", images: [], price: 10.2, amount: 1 }, { id: "2", cat: "Statue", name: "PiXiu 貔貅", desc: "Golden Lion Statue", image: "/lion2.png", images: [], price: 10.2, amount: 1 }, { id: "3", cat: "Incense", name: "Incense Burner (倒流香)", desc: "Incense Burner", image: "/incense2.png", images: [], price: 10.2, amount: 1 }, { id: "4", cat: "Incense", name: "Rose Wood Incense Burner", desc: "Rose Wood Incense Burner", image: "/incense3.png", images: [], price: 10.2, amount: 1 }]);
+        setProducts([
+            { id: "1", cat: "Crystal", name: "crystal1", desc: "this is a crystal", image: "/crystal1.png", images: [], price: 10.2, amount: 1 },
+            { id: "2", cat: "Statue", name: "PiXiu 貔貅", desc: "Golden Lion Statue", image: "/lion2.png", images: [], price: 10.2, amount: 1 },
+            { id: "3", cat: "Incense", name: "Incense Burner (倒流香)", desc: "Incense Burner", image: "/incense2.png", images: [], price: 10.2, amount: 1 },
+            { id: "4", cat: "Incense", name: "Rose Wood Incense Burner", desc: "Rose Wood Incense Burner", image: "/incense3.png", images: [], price: 10.2, amount: 1 }
+        ]);
     }, []);
 
     return (
@@ -49,7 +56,12 @@ function Products() {
                                         {productList.map((product2: Product) => {
                                             if (product2.cat === category) {
                                                 return (
-                                                    <ProductCard key={product2.id} product={product2} cart={cart} image={product2.image} setCart={setCart} />
+                                                    <ProductCard
+                                                        key={product2.id}
+                                                        product={product2}
+                                                        image={product2.image}
+                                                        /*setCart={setCart}*/
+                                                    />
                                                 );
                                             }
                                         })}
@@ -63,7 +75,12 @@ function Products() {
                                         {productList.map((product2: Product) => {
                                             if (product2.cat === category) {
                                                 return (
-                                                    <ProductCard key={product2.id} product={product2} cart={cart} image={product2.image} setCart={setCart} />
+                                                    <ProductCard
+                                                        key={product2.id}
+                                                        product={product2}
+                                                        image={product2.image}
+                                                        /*setCart={setCart}*/
+                                                    />
                                                 );
                                             }
                                         })}
@@ -84,4 +101,4 @@ function Products() {
     );
 }
 
-export default Products
+export default Products;

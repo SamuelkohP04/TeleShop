@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import ProductCard from "@/components/ProductCard";
+import { Product } from "../types";
+
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import {
     Select,
@@ -29,7 +31,8 @@ function Home() {
     const router = useRouter();
 
     useEffect(() => {
-        setProducts([{ id: "1", name: "crystal1", desc: "this is a crystal", price: 10.2, amount: 1 }, { id: "2", name: "crystal2", desc: "this is a crystal", price: 10.2, amount: 1 }, { id: "3", name: "crystal3", desc: "this is a crystal", price: 10.2, amount: 1 }, { id: "4", name: "crystal4", desc: "this is a crystal", price: 10.2, amount: 1 }]);
+        //setProducts([{ id: "1", name: "crystal1", desc: "this is a crystal", price: 10.2, amount: 1 }, { id: "2", name: "crystal2", desc: "this is a crystal", price: 10.2, amount: 1 }, { id: "3", name: "crystal3", desc: "this is a crystal", price: 10.2, amount: 1 }, { id: "4", name: "crystal4", desc: "this is a crystal", price: 10.2, amount: 1 }]);
+        setProducts([{ id: "1", cat: "Crystal", name: "crystal1", desc: "this is a crystal", image: "/crystal1.png", images: [], price: 10.2, amount: 1 }, { id: "2", cat: "Statue", name: "PiXiu 貔貅", desc: "Golden Lion Statue", image: "/lion1.png", images: [], price: 10.2, amount: 1 }, { id: "3", cat: "Incense", name: "Incense Burner (倒流香)", desc: "Incense Burner", image: "/incense1.png", images: [], price: 10.2, amount: 1 }, { id: "4", cat: "Incense", name: "Rose Wood Incense Burner", desc: "Rose Wood Incense Burner", image: "/incense3.png", images: [], price: 10.2, amount: 1 }]);
     }, []);
 
     return (
