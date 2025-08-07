@@ -8,7 +8,7 @@ if (!stripeSecretKey) {
   throw new Error("STRIPE_SECRET_KEY is not set in environment variables");
 }
 const stripe = new Stripe(stripeSecretKey, {
-  apiVersion: "2025-06-30.basil",
+  apiVersion: "2025-07-30.basil",
 });
 
 export async function GET(req: NextRequest) {
