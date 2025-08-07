@@ -404,7 +404,7 @@ export default function DashboardPage() {
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Mystical Header */}
-        <div className="flex justify-between items-center mb-8 p-6 bg-black/20 backdrop-blur-md rounded-2xl border border-purple-500/30 shadow-2xl">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8 p-4 md:p-6 bg-black/20 backdrop-blur-md rounded-2xl border border-purple-500/30 shadow-2xl">
           <div className="flex items-center space-x-4">
             <Gem className="h-10 w-10 text-purple-300 animate-pulse" />
             <div>
@@ -508,7 +508,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Mystical Bookings Section */}
-        <div className="relative group mb-8">
+        <div className="relative group mb-8 overflow-x-auto">
           {/* Animated Neon Border Glow */}
           <div
             className="absolute -inset-0.5 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 rounded-2xl opacity-60 group-hover:opacity-90 animate-pulse"
@@ -624,7 +624,7 @@ export default function DashboardPage() {
                       key={booking.id}
                       className="mb-6 p-4 bg-black/30 rounded-lg border border-purple-500/30 last:mb-0"
                     >
-                      <div className="grid grid-cols-2 gap-4 text-sm mb-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mb-4">
                         <div>
                           <span className="text-purple-300 font-semibold flex items-center">
                             <Star className="h-4 w-4 mr-2" />

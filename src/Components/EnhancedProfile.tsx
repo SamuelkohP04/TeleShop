@@ -280,23 +280,15 @@ export default function EnhancedProfile() {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto relative z-10">
-        {/* Mystical Header with Back Button */}
+      <div className="max-w-3xl mx-auto relative z-10 md:mt-8 md:mb-8">
+        {/* Header Card: Full width, more margin below */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between mb-8 p-6 bg-black/20 backdrop-blur-md rounded-2xl border border-purple-500/30 shadow-2xl"
+          className="w-full flex flex-col md:flex-row md:items-center gap-4 md:gap-8 md:p-8 md:rounded-2xl md:shadow-2xl md:border md:border-purple-500/30 bg-black/10 mb-8"
         >
-          <div className="flex items-center space-x-4">
-            <Button
-              onClick={() => router.push("/dashboard")}
-              variant="outline"
-              className="border-purple-500/50 text-purple-300 hover:bg-purple-500/20 hover:border-purple-400 transition-all duration-300"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Portal
-            </Button>
-            <div className="flex items-center space-x-3">
+          <div className="flex-1 flex flex-col gap-2">
+            <div className="flex items-center gap-3">
               <Gem className="h-10 w-10 text-purple-300 animate-pulse" />
               <div>
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">
@@ -308,23 +300,33 @@ export default function EnhancedProfile() {
               </div>
             </div>
           </div>
-          {profile?.paymentPlan === "Enlightenment" ? (
+          <div className="flex flex-col md:flex-row gap-2 md:gap-4 items-stretch md:items-center">
+            {profile?.paymentPlan === "Enlightenment" ? (
+              <Button
+                disabled
+                className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg cursor-not-allowed opacity-60 transition-all duration-300"
+              >
+                <Crown className="h-4 w-4 mr-2" />
+                Ascended to Enlightenment
+              </Button>
+            ) : (
+              <Button
+                onClick={handleUpgrade}
+                className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-lg hover:shadow-yellow-500/25 transition-all duration-300"
+              >
+                <Crown className="h-4 w-4 mr-2" />
+                Ascend to Enlightenment
+              </Button>
+            )}
             <Button
-              disabled
-              className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg cursor-not-allowed opacity-60 transition-all duration-300"
+              onClick={() => router.push("/dashboard")}
+              variant="outline"
+              className="border-purple-500/50 text-purple-300 hover:bg-purple-500/20 hover:border-purple-400 transition-all duration-300"
             >
-              <Crown className="h-4 w-4 mr-2" />
-              Ascended to Enlightenment
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Portal
             </Button>
-          ) : (
-            <Button
-              onClick={handleUpgrade}
-              className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-lg hover:shadow-yellow-500/25 transition-all duration-300"
-            >
-              <Crown className="h-4 w-4 mr-2" />
-              Ascend to Enlightenment
-            </Button>
-          )}
+          </div>
         </motion.div>
 
         {/* Success Message */}
@@ -339,7 +341,8 @@ export default function EnhancedProfile() {
           </motion.div>
         )}
 
-        <div className="grid lg:grid-cols-4 gap-8">
+        {/* Add extra margin between header and details section */}
+        <div className="grid lg:grid-cols-4 gap-8 mt-8">
           {/* Sidebar Navigation */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -369,13 +372,16 @@ export default function EnhancedProfile() {
                   <h3 className="font-semibold text-lg">
                     {profile?.fullname || profile?.username}
                   </h3>
+
+                  {/*
                   <p className="text-gray-600 text-sm mb-2">{profile?.email}</p>
                   {getPlanBadge(profile?.paymentPlan || "free")}
+                  */}
                 </div>
 
                 <nav className="space-y-2">
                   {[
-                    { id: "profile", label: "Profile Info", icon: User },
+                    { id: "profile", label: "Profile", icon: User },
                     { id: "security", label: "Security", icon: Lock, disabled: true },
                     { id: "notifications", label: "Notifications", icon: Bell, disabled: true },
                     { id: "preferences", label: "Preferences", icon: Settings, disabled: true },

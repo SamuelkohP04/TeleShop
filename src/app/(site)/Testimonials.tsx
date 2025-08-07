@@ -24,7 +24,7 @@ const testimonials = [
 
 export default function TestimonialsPage() {
   const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(1); // 1 = next, -1 = prev
+  const [direction, setDirection] = useState(1);
 
   const paginate = (dir: number) => {
     setDirection(dir);
@@ -53,7 +53,7 @@ export default function TestimonialsPage() {
       <div className="max-w-6xl mx-auto">
         <h2 className="text-4xl font-bold mb-12 text-center">What Clients Say ✨</h2>
 
-        <div className="relative flex items-center justify-center min-h-[320px]">
+        <div className="relative flex items-center justify-center min-h-[380px]">
           {/* Left arrow */}
           <button
             onClick={() => paginate(-1)}
@@ -63,22 +63,22 @@ export default function TestimonialsPage() {
             <ChevronLeft size={28} />
           </button>
 
-          {/* Static background card */}
-          <div className="w-full sm:w-[80%] min-h-[320px] bg-zinc-900 border border-zinc-800 rounded-lg p-6 relative overflow-hidden">
+          {/* Testimonial card */}
+          <div className="w-full sm:w-[80%] bg-zinc-900 border border-zinc-800 rounded-lg p-4 sm:p-6 relative min-h-[380px]">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
-                key={current} // ensures re-render on index change
+                key={current}
                 custom={direction}
                 variants={variants}
                 initial="enter"
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.4, ease: "easeInOut" }}
-                className="absolute inset-0 flex flex-col sm:flex-row gap-6 p-4"
-                >
+                className="absolute inset-0 flex flex-col sm:flex-row gap-6 p-4 sm:p-6"
+              >
                 {/* Avatar */}
-                <div className="w-full sm:w-1/3 flex-shrink-0">
-                  <div className="w-full aspect-square bg-gray-300 rounded-md overflow-hidden">
+                <div className="w-full sm:w-1/3 flex justify-center items-start">
+                  <div className="w-32 h-32 sm:w-64 sm:h-64 rounded-md overflow-hidden">
                     <img
                       src={testimonial.avatar}
                       alt={testimonial.name}
@@ -88,9 +88,9 @@ export default function TestimonialsPage() {
                 </div>
 
                 {/* Text */}
-                <div className="sm:w-2/3 flex flex-col justify-between">
-                  <p className="text-gray-300 text-2xl mb-4">{testimonial.text}</p>
-                  <p className="text-white font-semibold text-3xl">{testimonial.name}</p>
+                <div className="flex-1 flex flex-col justify-between items-center sm:items-start text-center sm:text-left">
+                  <p className="text-gray-300 text-lg sm:text-2xl mb-4">{testimonial.text}</p>
+                  <p className="text-white font-semibold text-2xl sm:text-3xl">{testimonial.name}</p>
                 </div>
               </motion.div>
             </AnimatePresence>
