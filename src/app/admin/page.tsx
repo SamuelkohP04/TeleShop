@@ -392,8 +392,8 @@ export default function AdminDashboard() {
                           return null;
                         }}
                         onClickDay={handleDateClick}
-                        className="bg-black/20 border border-purple-500/30 rounded-lg p-4 text-purple-300"
-                      />
+                        className="bg-black/20 border border-purple-500/30 rounded-lg p-4 text-gray-900 dark:text-gray-100 calendar-dark-text"
+                        />
                     </div>
                   </div>
 

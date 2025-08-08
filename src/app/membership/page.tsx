@@ -1,4 +1,6 @@
 import Navbar from "@/app/(site)/Navbar";
+import Footer from "@/app/(site)/Footer";
+
 
 export default function MembershipPage() {
   const membershipPlans = [
@@ -135,6 +137,8 @@ export default function MembershipPage() {
           </div>
         ))}
       </div>
+
+      <Footer />
     </div>
   );
 }

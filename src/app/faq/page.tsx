@@ -15,6 +15,7 @@ import { BsDiscord } from "react-icons/bs";              // Discord in Bootstrap
 */
 
 import Navbar from "@/app/(site)/Navbar";
+import Footer from "@/app/(site)/Footer";
 
 export default function FAQContactPage() {
   const [form, setForm] = useState({
@@ -62,10 +63,10 @@ export default function FAQContactPage() {
 
   return (
 
-    <div
-      className="min-h-screen py-12 px-6 flex flex-col gap-16 items-center"
-    >
-  
+    <div className="relative min-h-screen bg-transparent flex flex-col">
+      <Navbar />
+      <main className="flex-1 w-full flex flex-col gap-16 items-center py-12 px-6">
+
 
     <div className="fixed top-0 left-0 w-full h-full -z-10 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url(/LandingPage/LandingBackground.jpg)" }}
@@ -324,6 +325,8 @@ export default function FAQContactPage() {
           {status === "error" && <p className="text-red-400">Something went wrong. Try again later.</p>}
         </form>
       </section>
+      </main>
+      <Footer />
     </div>
   );
 }

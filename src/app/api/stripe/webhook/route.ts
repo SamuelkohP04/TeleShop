@@ -1,3 +1,7 @@
+/*
+
+Not needed anymore
+
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getFirestore } from "firebase-admin/firestore";
@@ -32,3 +36,5 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ received: true });
 } 
+
+*/
