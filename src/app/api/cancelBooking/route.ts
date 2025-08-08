@@ -14,7 +14,11 @@ export async function POST(req: NextRequest) {
     if (!bookingId) return NextResponse.json({ error: "No bookingId provided" }, { status: 400 });
     const db = getFirestore();
     const doc = await db.collection("bookings").doc(bookingId).get();
-    if (!doc.exists || doc.data()?.uid !== uid) {
+    // Check Firestore users collection for isAdmin property
+    const userDoc = await db.collection("users").doc(uid).get();
+    const isAdmin = userDoc.exists && userDoc.data()?.isAdmin === true;
+
+    if (!doc.exists || (!isAdmin && doc.data()?.uid !== uid)) {
       return NextResponse.json({ error: "Booking not found or unauthorized" }, { status: 403 });
     }
     await db.collection("bookings").doc(bookingId).delete();

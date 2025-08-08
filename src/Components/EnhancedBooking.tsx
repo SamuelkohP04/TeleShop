@@ -238,6 +238,24 @@ export default function EnhancedBooking() {
                 ))}
               </div>
 
+              <div className="flex justify-between pt-6">
+                <Button
+                  onClick={() => router.push("/dashboard")}
+                  variant="outline"
+                  className="px-6 py-3 rounded-full"
+                >
+                  <ArrowLeft className="w-5 h-5 mr-2" /> Back
+                </Button>
+                <Button
+                  onClick={nextStep}
+                  disabled={!selectedService}
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-3 rounded-full"
+                >
+                  Continue <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </div>
+
+              {/*}
               <div className="flex justify-center pt-6">
                 <Button
                   onClick={nextStep}
@@ -247,6 +265,7 @@ export default function EnhancedBooking() {
                   Continue <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </div>
+              */}
             </motion.div>
           )}
 

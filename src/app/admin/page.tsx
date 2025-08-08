@@ -150,7 +150,7 @@ export default function AdminDashboard() {
       <div
         className="min-h-screen p-4 relative overflow-hidden flex items-center justify-center"
         style={{
-          backgroundImage: "url(/DashboardPage/seamless-starry-pattern.jpeg)",
+          backgroundImage: "url(/DashboardPage/seamless-starry-pattern.jpg)",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "repeat",
@@ -216,7 +216,7 @@ export default function AdminDashboard() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between mb-8 p-6 bg-black/20 backdrop-blur-md rounded-2xl border border-purple-500/30 shadow-2xl"
+          className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 p-4 md:p-6 bg-black/20 backdrop-blur-md rounded-2xl border border-purple-500/30 shadow-2xl"
         >
           <div className="flex items-center space-x-4">
             <Crown className="h-12 w-12 text-yellow-300 animate-pulse" />
@@ -313,7 +313,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Mystical Admin Calendar */}
-        <div className="relative group mb-8">
+        <div className="relative group mb-8 overflow-x-auto">
           <div
             className="absolute -inset-0.5 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 rounded-2xl opacity-60 group-hover:opacity-90 animate-pulse"
             style={{ filter: "blur(1px)" }}
@@ -451,13 +451,13 @@ export default function AdminDashboard() {
                   </p>
                 </div>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-4 overflow-y-auto">
                   {selectedDateBookings.map((booking, idx) => (
                     <div
                       key={booking.id}
                       className="bg-black/30 rounded-lg border border-purple-500/30 p-4"
                     >
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mb-4">
                         {/* Booking Details */}
                         <div>
                           <h4 className="text-lg font-bold text-purple-300 mb-3 flex items-center">
@@ -535,6 +535,40 @@ export default function AdminDashboard() {
                             </p>
                           )}
                         </div>
+                      </div>
+                      <div className="mt-4">
+                        <Button
+                          className="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold shadow-lg transition-all duration-300"
+                          onClick={async () => {
+                            if (!window.confirm('Mark this booking as complete and remove? This action cannot be undone.')) return;
+                            setBookingsLoading(true);
+                            try {
+                              const user = auth.currentUser;
+                              if (!user) throw new Error('Not authenticated');
+                              const idToken = await user.getIdToken();
+                              const res = await fetch('/api/cancelBooking', {
+                                method: 'POST',
+                                headers: {
+                                  'Content-Type': 'application/json',
+                                  Authorization: `Bearer ${idToken}`,
+                                },
+                                body: JSON.stringify({ bookingId: booking.id }),
+                              });
+                              if (!res.ok) {
+                                const { error } = await res.json();
+                                throw new Error(error || 'Failed to remove booking');
+                              }
+                              setBookings(bookings => bookings.filter(b => b.id !== booking.id));
+                              setSelectedDateBookings(selectedDateBookings => selectedDateBookings.filter(b => b.id !== booking.id));
+                            } catch (err) {
+                              alert((err as any).message || 'Error removing booking');
+                            } finally {
+                              setBookingsLoading(false);
+                            }
+                          }}
+                        >
+                          Mark as complete and remove
+                        </Button>
                       </div>
                     </div>
                   ))}
