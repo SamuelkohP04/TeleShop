@@ -6,12 +6,10 @@
     "start:bot": "ts-node src/bot.ts",
     "start:web": "next start",
     "dev": "next dev",
-    "dev:react-scripts": "react-scripts start",
     "build": "next build",
-    "build:react-scripts": "react-scripts build",
-    "test": "react-scripts test",
     "lint": "next lint",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "wrangler deploy"
   },
   "dependencies": {
     "@material-tailwind/react": "^2.1.10",
@@ -66,7 +64,8 @@
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
-    "typescript": "^4.9.5"
+    "typescript": "^4.9.5",
+    "wrangler": "^4.28.1"
   },
   "eslintConfig": {
     "extends": [
