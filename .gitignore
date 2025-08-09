@@ -34,3 +34,6 @@ out/
 
 # Temporary/Debug files
 telegram_bot/src/test.ts
+
+# Cloudflare Workers
+wrangler.toml
