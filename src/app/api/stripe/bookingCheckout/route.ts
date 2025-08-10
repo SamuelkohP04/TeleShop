@@ -3,12 +3,14 @@ import { adminAuth } from "@/lib/firebaseAdmin";
 import Stripe from "stripe";
 import validator from "validator";
 
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+const stripeSecretKey = process.env.TEST_ENVIRONMENT === 'production'
+  ? process.env.PROD_STRIPE_SECRET_KEY
+  : process.env.STRIPE_SECRET_KEY;
 if (!stripeSecretKey) {
-  throw new Error("STRIPE_SECRET_KEY is not set in environment variables");
+  throw new Error("Stripe secret key is not set in environment variables");
 }
 const stripe = new Stripe(stripeSecretKey, {
-  apiVersion: "2025-07-30.basil",
+  apiVersion: "2025-06-30.basil",
 });
 
 export async function POST(req: NextRequest) {
