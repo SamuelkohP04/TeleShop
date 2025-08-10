@@ -49,6 +49,7 @@ const SERVICES = [
       "Personal numbers",
       "Destiny insights",
     ],
+    popular: false,
   },
   {
     id: "bundle",
@@ -72,6 +73,7 @@ const SERVICES = [
       "Cosmic alignment",
       "Blessing guidance",
     ],
+    popular: false,
   },
 ] as const;
 
