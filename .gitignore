@@ -37,3 +37,7 @@ telegram_bot/src/test.ts
 
 # Cloudflare Workers
 wrangler.toml
+/.wrangler
+
+# Open Next.js
+.open-next/

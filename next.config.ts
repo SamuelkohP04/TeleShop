@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone", // enables static exports
+  // output: "export", // enables static exports
   reactStrictMode: true,
   eslint: {
     // Warning: This allows production builds to successfully complete even if

@@ -9,7 +9,9 @@
     "build": "next build",
     "lint": "next lint",
     "eject": "react-scripts eject",
-    "deploy": "wrangler deploy"
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
     "@material-tailwind/react": "^2.1.10",
@@ -36,6 +38,7 @@
     "firebase": "^11.10.0",
     "firebase-admin": "^13.4.0",
     "framer-motion": "^12.19.2",
+    "jose": "^6.0.12",
     "lucide-react": "^0.460.0",
     "next": "^15.4.6",
     "next-themes": "^0.4.6",
