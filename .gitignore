@@ -34,3 +34,13 @@ out/
 
 # Temporary/Debug files
 telegram_bot/src/test.ts
+
+# Cloudflare Workers
+wrangler.toml
+/.wrangler
+
+# Open Next.js
+.open-next/
+
+# .dev.vars
+.dev.vars
