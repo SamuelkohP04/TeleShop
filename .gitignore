@@ -41,3 +41,6 @@ wrangler.toml
 
 # Open Next.js
 .open-next/
+
+# .dev.vars
+.dev.vars
