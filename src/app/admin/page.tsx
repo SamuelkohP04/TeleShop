@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebaseClient";
@@ -11,6 +11,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import {
   Crown,
+  Sun,
   Users,
   Calendar as CalendarIcon,
   Clock,
@@ -48,19 +49,196 @@ type Booking = {
   userProfile?: UserProfile;
 };
 
-export default function AdminDashboard() {
-  const router = useRouter();
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [bookings, setBookings] = useState<Booking[]>([]);
-  const [bookingsLoading, setBookingsLoading] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedDateBookings, setSelectedDateBookings] = useState<Booking[]>(
-    []
-  );
-  const [showModal, setShowModal] = useState(false);
+// Static components that don't need re-rendering
+const MysticalBackground = () => (
+  <div className="absolute inset-0 opacity-10">
+    <div className="absolute top-20 left-10 animate-pulse">
+      <Star className="h-6 w-6 text-yellow-300" />
+    </div>
+    <div className="absolute top-40 right-20 animate-bounce">
+      <Moon className="h-8 w-8 text-blue-300" />
+    </div>
+    <div className="absolute bottom-32 left-1/4 animate-pulse">
+      <Sparkles className="h-5 w-5 text-purple-300" />
+    </div>
+  </div>
+);
 
-  // Available time slots (45 minutes each)
+const MysticalAdminHeader = ({ profile, onLogout, router }: any) => (
+  <motion.div
+    initial={{ opacity: 0, y: -20 }}
+    animate={{ opacity: 1, y: 0 }}
+    className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 p-4 md:p-6 bg-black/20 backdrop-blur-md rounded-2xl border border-purple-500/30 shadow-2xl"
+  >
+    <div className="flex items-center space-x-4">
+      <Crown className="h-12 w-12 text-yellow-300 animate-pulse" />
+      <div>
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+          Admin Portal
+        </h1>
+        <p className="text-purple-200/70">
+          Master of Sacred Appointments
+        </p>
+      </div>
+    </div>
+    <div className="flex items-center space-x-4">
+      <Button
+        onClick={() => router.push("/dashboard")}
+        variant="outline"
+        className="border-purple-500/50 text-purple-300 hover:bg-purple-500/20 hover:border-purple-400 transition-all duration-300"
+      >
+        <ArrowLeft className="h-4 w-4 mr-2" />
+        User Portal
+      </Button>
+      <Button
+        onClick={onLogout}
+        variant="outline"
+        className="border-red-500/50 text-red-300 hover:bg-red-500/20 hover:border-red-400 transition-all duration-300"
+      >
+        <LogOut className="h-4 w-4 mr-2" />
+        Exit Portal
+      </Button>
+    </div>
+  </motion.div>
+);
+
+const AdminStatsCards = ({ bookings }: any) => {
+  // Memoized calculations
+  const stats = useMemo(() => ({
+    totalBookings: bookings.length,
+    uniqueClients: new Set(bookings.map((b: any) => b.uid)).size,
+    todaySessions: bookings.filter((b: any) => {
+      const today = new Date().toDateString();
+      const bookingDate = new Date(b.date).toDateString();
+      return bookingDate === today;
+    }).length,
+  }), [bookings]);
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="relative group">
+        <div
+          className="absolute -inset-0.5 bg-gradient-to-r from-yellow-600 via-orange-600 to-yellow-600 rounded-2xl opacity-75 group-hover:opacity-100 animate-pulse"
+          style={{ filter: "blur(1px)" }}
+        ></div>
+        <Card className="relative bg-black/30 backdrop-blur-md border-0 shadow-2xl">
+          <CardContent className="p-6 text-center">
+            <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CalendarIcon className="h-8 w-8 text-white" />
+            </div>
+            <h3 className="text-xl font-bold text-yellow-300 mb-2">
+              Total Bookings
+            </h3>
+            <p className="text-3xl font-bold text-white">
+              {stats.totalBookings}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="relative group">
+        <div
+          className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 rounded-2xl opacity-75 group-hover:opacity-100 animate-pulse"
+          style={{ filter: "blur(1px)" }}
+        ></div>
+        <Card className="relative bg-black/30 backdrop-blur-md border-0 shadow-2xl">
+          <CardContent className="p-6 text-center">
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Users className="h-8 w-8 text-white" />
+            </div>
+            <h3 className="text-xl font-bold text-blue-300 mb-2">
+              Unique Clients
+            </h3>
+            <p className="text-3xl font-bold text-white">
+              {stats.uniqueClients}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="relative group">
+        <div
+          className="absolute -inset-0.5 bg-gradient-to-r from-green-600 via-emerald-600 to-green-600 rounded-2xl opacity-75 group-hover:opacity-100 animate-pulse"
+          style={{ filter: "blur(1px)" }}
+        ></div>
+        <Card className="relative bg-black/30 backdrop-blur-md border-0 shadow-2xl">
+          <CardContent className="p-6 text-center">
+            <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Clock className="h-8 w-8 text-white" />
+            </div>
+            <h3 className="text-xl font-bold text-green-300 mb-2">
+              Today&apos;s Sessions
+            </h3>
+            <p className="text-3xl font-bold text-white">
+              {stats.todaySessions}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+// Memoized calendar component
+const AdminCalendar = ({ bookings, onDateClick, selectedDate }: any) => {
+  const getBookingsForDate = useCallback((date: Date) => {
+    const dateStr = date.toDateString();
+    return bookings.filter((booking: any) => {
+      const bookingDate = new Date(booking.date);
+      return bookingDate.toDateString() === dateStr;
+    });
+  }, [bookings]);
+
+  const tileClassName = useCallback(({ date, view }: any) => {
+    const isToday = date.toDateString() === new Date().toDateString();
+    const hasBookings = getBookingsForDate(date).length > 0;
+    return [
+      isToday ? "bg-purple-100 dark:bg-purple-800" : "",
+      hasBookings ? "border-2 border-purple-400" : "",
+      "text-gray-900 dark:text-gray-100 calendar-dark-text",
+    ]
+      .filter(Boolean)
+      .join(" ");
+  }, [getBookingsForDate]);
+
+  const tileContent = useCallback(({ date, view }: any) => {
+    if (view === "month") {
+      const count = getBookingsForDate(date).length;
+      if (count > 0) {
+        return (
+          <div className="flex justify-center items-center mt-1">
+            <Badge
+              variant="secondary"
+              className="bg-purple-500 text-white text-xs px-1 py-0.5"
+            >
+              {count}
+            </Badge>
+          </div>
+        );
+      }
+    }
+    return null;
+  }, [getBookingsForDate]);
+
+  return (
+    <Calendar
+      onChange={(value) => {
+        if (Array.isArray(value)) {
+          onDateClick(value[0] ?? null);
+        } else {
+          onDateClick(value);
+        }
+      }}
+      value={selectedDate}
+      tileClassName={tileClassName}
+      tileContent={tileContent}
+      onClickDay={onDateClick}
+      className="bg-black/20 border border-purple-500/30 rounded-lg p-4 text-gray-900 dark:text-gray-100 calendar-dark-text"
+    />
+  );
+};
+
+const TimeSlotsInfo = () => {
   const timeSlots = [
     "10:00 AM - 10:45 AM",
     "11:00 AM - 11:45 AM",
@@ -69,41 +247,263 @@ export default function AdminDashboard() {
     "4:00 PM - 4:45 PM",
   ];
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        try {
-          const idToken = await user.getIdToken();
-          const res = await fetch("/api/profile", {
-            method: "GET",
-            headers: { Authorization: `Bearer ${idToken}` },
-          });
-          if (res.ok) {
-            const userProfile = await res.json();
-            if (!userProfile.isAdmin) {
-              // Not an admin, redirect to regular dashboard
-              router.push("/dashboard");
-              return;
-            }
-            setProfile(userProfile);
-            await fetchAllBookings(idToken);
-          } else {
-            router.push("/login");
-          }
-        } catch (error) {
-          console.error("Error fetching profile:", error);
-          router.push("/login");
+  return (
+    <div className="bg-black/20 border border-purple-500/30 rounded-lg p-4">
+      <h3 className="text-lg font-bold text-purple-300 mb-3 flex items-center">
+        <Clock className="h-5 w-5 mr-2" />
+        Available Time Slots (45 minutes each)
+      </h3>
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+        {timeSlots.map((slot, idx) => (
+          <Badge
+            key={idx}
+            variant="outline"
+            className="border-purple-500/50 text-purple-300 text-center"
+          >
+            {slot}
+          </Badge>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Separate modal component to reduce main component complexity
+const BookingDetailsModal = ({ 
+  showModal, 
+  selectedDate, 
+  selectedDateBookings, 
+  setShowModal, 
+  setBookings, 
+  setSelectedDateBookings 
+}: any) => {
+  const handleCompleteBooking = useCallback(async (booking: any) => {
+    if (!window.confirm('Mark this booking as complete and remove? This action cannot be undone.')) return;
+    
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error('Not authenticated');
+      const idToken = await user.getIdToken();
+      const res = await fetch('/api/cancelBooking', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({ bookingId: booking.id }),
+      });
+      if (!res.ok) {
+        const { error } = await res.json();
+        throw new Error(error || 'Failed to remove booking');
+      }
+      setBookings((bookings: any) => bookings.filter((b: any) => b.id !== booking.id));
+      setSelectedDateBookings((selectedDateBookings: any) => 
+        selectedDateBookings.filter((b: any) => b.id !== booking.id)
+      );
+    } catch (err: any) {
+      alert(err.message || 'Error removing booking');
+    }
+  }, [setBookings, setSelectedDateBookings]);
+
+  if (!showModal || !selectedDate) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
+      <div className="bg-gradient-to-br from-indigo-900 to-purple-900 border border-purple-500/50 rounded-2xl shadow-2xl p-6 w-full max-w-4xl max-h-[95vh] overflow-y-auto relative mx-auto">
+        <div className="sticky top-0 bg-gradient-to-br from-indigo-900 to-purple-900 z-10 pb-4 mb-4 border-b border-purple-500/30">
+          <button
+            className="absolute top-4 right-4 text-purple-300 hover:text-white transition-colors"
+            onClick={() => setShowModal(false)}
+          >
+            ✕
+          </button>
+          <div className="text-center">
+            <CalendarIcon className="h-12 w-12 text-purple-300 mx-auto mb-4 animate-pulse" />
+            <h3 className="text-2xl font-bold text-purple-300">
+              Bookings for {selectedDate.toLocaleDateString()}
+            </h3>
+            <p className="text-purple-200/70">
+              {selectedDateBookings.length} appointment(s) scheduled
+            </p>
+          </div>
+        </div>
+
+        {selectedDateBookings.length === 0 ? (
+          <div className="text-center py-8">
+            <Star className="h-16 w-16 text-purple-300/50 mx-auto mb-4" />
+            <p className="text-purple-300 text-lg">
+              No appointments scheduled for this date
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-4 overflow-y-auto">
+            {selectedDateBookings.map((booking: any, idx: number) => (
+              <div
+                key={booking.id}
+                className="bg-black/30 rounded-lg border border-purple-500/30 p-4"
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mb-4">
+                  {/* Booking Details */}
+                  <div>
+                    <h4 className="text-lg font-bold text-purple-300 mb-3 flex items-center">
+                      <CalendarIcon className="h-5 w-5 mr-2" />
+                      Appointment Details
+                    </h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center">
+                        <Clock className="h-4 w-4 text-purple-400 mr-2" />
+                        <span className="text-purple-200">
+                          Time: {booking.timeSlot}
+                        </span>
+                      </div>
+                      <div className="flex items-center">
+                        <Gem className="h-4 w-4 text-purple-400 mr-2" />
+                        <span className="text-purple-200">
+                          Service: {booking.service}
+                        </span>
+                      </div>
+                      <div className="flex items-center">
+                        <Sun className="h-4 w-4 text-purple-400 mr-2" />
+                        <span className="text-purple-200">
+                          Meeting Type: { booking.consultationType || "Not provided" }
+                        </span>
+                      </div>
+                      {booking.remarks && (
+                        <div className="flex items-start">
+                          <Star className="h-4 w-4 text-purple-400 mr-2 mt-0.5" />
+                          <span className="text-purple-200">
+                            Notes: {booking.remarks}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Client Details */}
+                  <div>
+                    <h4 className="text-lg font-bold text-purple-300 mb-3 flex items-center">
+                      <User className="h-5 w-5 mr-2" />
+                      Client Information
+                    </h4>
+                    {booking.userProfile ? (
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-center">
+                          <User className="h-4 w-4 text-purple-400 mr-2" />
+                          <span className="text-purple-200">
+                            {booking.userProfile.fullname}
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <Mail className="h-4 w-4 text-purple-400 mr-2" />
+                          <span className="text-purple-200">
+                            {booking.userProfile.email}
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <Phone className="h-4 w-4 text-purple-400 mr-2" />
+                          <span className="text-purple-200">
+                            {booking.userProfile.phone || "Not provided"}
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <Crown className="h-4 w-4 text-purple-400 mr-2" />
+                          <Badge
+                            variant={
+                              booking.userProfile.paymentPlan === "premium"
+                                ? "default"
+                                : "secondary"
+                            }
+                            className="text-xs"
+                          >
+                            {booking.userProfile.paymentPlan}
+                          </Badge>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-purple-300/50 text-sm">
+                        Loading client details...
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <Button
+                    className="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold shadow-lg transition-all duration-300"
+                    onClick={() => handleCompleteBooking(booking)}
+                  >
+                    Mark as complete and remove
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default function AdminDashboard() {
+  const router = useRouter();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [bookingsLoading, setBookingsLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDateBookings, setSelectedDateBookings] = useState<Booking[]>([]);
+  const [showModal, setShowModal] = useState(false);
+
+  // Memoized handlers to prevent unnecessary re-renders
+  const handleLogout = useCallback(async () => {
+    try {
+      await auth.signOut();
+      router.push("/login");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  }, [router]);
+
+  const handleDateClick = useCallback((date: Date) => {
+    const dayBookings = bookings.filter((booking) => {
+      const dateStr = date.toDateString();
+      const bookingDate = new Date(booking.date);
+      return bookingDate.toDateString() === dateStr;
+    });
+    setSelectedDate(date);
+    setSelectedDateBookings(dayBookings);
+    setShowModal(true);
+  }, [bookings]);
+
+  // Memoized profile fetch
+  const fetchProfileForUser = useCallback(async (user: any) => {
+    setLoading(true);
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/profile", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
+      if (res.ok) {
+        const userProfile = await res.json();
+        if (!userProfile.isAdmin) {
+          router.push("/dashboard");
+          return;
         }
+        setProfile(userProfile);
+        await fetchAllBookings(idToken);
       } else {
         router.push("/login");
       }
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      router.push("/login");
+    } finally {
       setLoading(false);
-    });
-
-    return () => unsubscribe();
+    }
   }, [router]);
 
-  const fetchAllBookings = async (idToken: string) => {
+  // Memoized bookings fetch
+  const fetchAllBookings = useCallback(async (idToken: string) => {
     setBookingsLoading(true);
     try {
       const res = await fetch("/api/admin/bookings", {
@@ -119,32 +519,21 @@ export default function AdminDashboard() {
     } finally {
       setBookingsLoading(false);
     }
-  };
+  }, []);
 
-  const getBookingsForDate = (date: Date) => {
-    const dateStr = date.toDateString();
-    return bookings.filter((booking) => {
-      const bookingDate = new Date(booking.date);
-      return bookingDate.toDateString() === dateStr;
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        fetchProfileForUser(user);
+      } else {
+        router.push("/login");
+      }
     });
-  };
 
-  const handleDateClick = (date: Date) => {
-    const dayBookings = getBookingsForDate(date);
-    setSelectedDate(date);
-    setSelectedDateBookings(dayBookings);
-    setShowModal(true);
-  };
+    return () => unsubscribe();
+  }, [fetchProfileForUser, router]);
 
-  const handleLogout = async () => {
-    try {
-      await auth.signOut();
-      router.push("/login");
-    } catch (error) {
-      console.error("Error signing out:", error);
-    }
-  };
-
+  // Memoized loading state
   if (loading) {
     return (
       <div
@@ -195,122 +584,16 @@ export default function AdminDashboard() {
         backgroundRepeat: "repeat",
       }}
     >
-      {/* Minimal overlay for text readability without obscuring the moon pattern */}
       <div className="absolute inset-0 bg-black/20"></div>
-
-      {/* Mystical Background Elements */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-10 animate-pulse">
-          <Star className="h-6 w-6 text-yellow-300" />
-        </div>
-        <div className="absolute top-40 right-20 animate-bounce">
-          <Moon className="h-8 w-8 text-blue-300" />
-        </div>
-        <div className="absolute bottom-32 left-1/4 animate-pulse">
-          <Sparkles className="h-5 w-5 text-purple-300" />
-        </div>
-      </div>
+      <MysticalBackground />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Mystical Admin Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 p-4 md:p-6 bg-black/20 backdrop-blur-md rounded-2xl border border-purple-500/30 shadow-2xl"
-        >
-          <div className="flex items-center space-x-4">
-            <Crown className="h-12 w-12 text-yellow-300 animate-pulse" />
-            <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                Admin Portal
-              </h1>
-              <p className="text-purple-200/70">
-                Master of Sacred Appointments
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Button
-              onClick={() => router.push("/dashboard")}
-              variant="outline"
-              className="border-purple-500/50 text-purple-300 hover:bg-purple-500/20 hover:border-purple-400 transition-all duration-300"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              User Portal
-            </Button>
-            <Button
-              onClick={handleLogout}
-              variant="outline"
-              className="border-red-500/50 text-red-300 hover:bg-red-500/20 hover:border-red-400 transition-all duration-300"
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Exit Portal
-            </Button>
-          </div>
-        </motion.div>
-
-        {/* Admin Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="relative group">
-            <div
-              className="absolute -inset-0.5 bg-gradient-to-r from-yellow-600 via-orange-600 to-yellow-600 rounded-2xl opacity-75 group-hover:opacity-100 animate-pulse"
-              style={{ filter: "blur(1px)" }}
-            ></div>
-            <Card className="relative bg-black/30 backdrop-blur-md border-0 shadow-2xl">
-              <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CalendarIcon className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-yellow-300 mb-2">
-                  Total Bookings
-                </h3>
-                <p className="text-3xl font-bold text-white">
-                  {bookings.length}
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="relative group">
-            <div
-              className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 rounded-2xl opacity-75 group-hover:opacity-100 animate-pulse"
-              style={{ filter: "blur(1px)" }}
-            ></div>
-            <Card className="relative bg-black/30 backdrop-blur-md border-0 shadow-2xl">
-              <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-blue-300 mb-2">
-                  Unique Clients
-                </h3>
-                <p className="text-3xl font-bold text-white">
-                  {new Set(bookings.map((b) => b.uid)).size}
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="relative group">
-            <div
-              className="absolute -inset-0.5 bg-gradient-to-r from-green-600 via-emerald-600 to-green-600 rounded-2xl opacity-75 group-hover:opacity-100 animate-pulse"
-              style={{ filter: "blur(1px)" }}
-            ></div>
-            <Card className="relative bg-black/30 backdrop-blur-md border-0 shadow-2xl">
-              <CardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Clock className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-green-300 mb-2">
-                  Today&apos;s Sessions
-                </h3>
-                <p className="text-3xl font-bold text-white">
-                  {getBookingsForDate(new Date()).length}
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+        <MysticalAdminHeader 
+          profile={profile} 
+          onLogout={handleLogout} 
+          router={router}
+        />
+        <AdminStatsCards bookings={bookings} />
 
         {/* Mystical Admin Calendar */}
         <div className="relative group mb-8 overflow-x-auto">
@@ -351,232 +634,29 @@ export default function AdminDashboard() {
                 <>
                   <div className="flex justify-center mb-6">
                     <div className="mystical-calendar min-h-[320px] flex items-center justify-center">
-                      <Calendar
-                        onChange={(value) => {
-                          if (Array.isArray(value)) {
-                            setSelectedDate(value[0] ?? null);
-                          } else {
-                            setSelectedDate(value);
-                          }
-                        }}
-                        value={selectedDate}
-                        tileClassName={({ date, view }) => {
-                          const isToday =
-                            date.toDateString() === new Date().toDateString();
-                          const hasBookings =
-                            getBookingsForDate(date).length > 0;
-                          return [
-                            isToday ? "bg-purple-100 dark:bg-purple-800" : "",
-                            hasBookings ? "border-2 border-purple-400" : "",
-                            "text-gray-900 dark:text-gray-100 calendar-dark-text",
-                          ]
-                            .filter(Boolean)
-                            .join(" ");
-                        }}
-                        tileContent={({ date, view }) => {
-                          if (view === "month") {
-                            const count = getBookingsForDate(date).length;
-                            if (count > 0) {
-                              return (
-                                <div className="flex justify-center items-center mt-1">
-                                  <Badge
-                                    variant="secondary"
-                                    className="bg-purple-500 text-white text-xs px-1 py-0.5"
-                                  >
-                                    {count}
-                                  </Badge>
-                                </div>
-                              );
-                            }
-                          }
-                          return null;
-                        }}
-                        onClickDay={handleDateClick}
-                        className="bg-black/20 border border-purple-500/30 rounded-lg p-4 text-purple-300"
+                      <AdminCalendar 
+                        bookings={bookings} 
+                        onDateClick={handleDateClick}
+                        selectedDate={selectedDate}
                       />
                     </div>
                   </div>
-
-                  {/* Available Time Slots Info */}
-                  <div className="bg-black/20 border border-purple-500/30 rounded-lg p-4">
-                    <h3 className="text-lg font-bold text-purple-300 mb-3 flex items-center">
-                      <Clock className="h-5 w-5 mr-2" />
-                      Available Time Slots (45 minutes each)
-                    </h3>
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-                      {timeSlots.map((slot, idx) => (
-                        <Badge
-                          key={idx}
-                          variant="outline"
-                          className="border-purple-500/50 text-purple-300 text-center"
-                        >
-                          {slot}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
+                  <TimeSlotsInfo />
                 </>
               )}
             </CardContent>
           </Card>
         </div>
 
-        {/* Booking Details Modal */}
-        {showModal && selectedDate && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
-            <div className="bg-gradient-to-br from-indigo-900 to-purple-900 border border-purple-500/50 rounded-2xl shadow-2xl p-6 w-full max-w-4xl max-h-[95vh] overflow-y-auto relative mx-auto">
-              <div className="sticky top-0 bg-gradient-to-br from-indigo-900 to-purple-900 z-10 pb-4 mb-4 border-b border-purple-500/30">
-                <button
-                  className="absolute top-4 right-4 text-purple-300 hover:text-white transition-colors"
-                  onClick={() => setShowModal(false)}
-                >
-                  ✕
-                </button>
-                <div className="text-center">
-                  <CalendarIcon className="h-12 w-12 text-purple-300 mx-auto mb-4 animate-pulse" />
-                  <h3 className="text-2xl font-bold text-purple-300">
-                    Bookings for {selectedDate.toLocaleDateString()}
-                  </h3>
-                  <p className="text-purple-200/70">
-                    {selectedDateBookings.length} appointment(s) scheduled
-                  </p>
-                </div>
-              </div>
-
-              {selectedDateBookings.length === 0 ? (
-                <div className="text-center py-8">
-                  <Star className="h-16 w-16 text-purple-300/50 mx-auto mb-4" />
-                  <p className="text-purple-300 text-lg">
-                    No appointments scheduled for this date
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-4 overflow-y-auto">
-                  {selectedDateBookings.map((booking, idx) => (
-                    <div
-                      key={booking.id}
-                      className="bg-black/30 rounded-lg border border-purple-500/30 p-4"
-                    >
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mb-4">
-                        {/* Booking Details */}
-                        <div>
-                          <h4 className="text-lg font-bold text-purple-300 mb-3 flex items-center">
-                            <CalendarIcon className="h-5 w-5 mr-2" />
-                            Appointment Details
-                          </h4>
-                          <div className="space-y-2 text-sm">
-                            <div className="flex items-center">
-                              <Clock className="h-4 w-4 text-purple-400 mr-2" />
-                              <span className="text-purple-200">
-                                Time: {booking.timeSlot}
-                              </span>
-                            </div>
-                            <div className="flex items-center">
-                              <Gem className="h-4 w-4 text-purple-400 mr-2" />
-                              <span className="text-purple-200">
-                                Service: {booking.service}
-                              </span>
-                            </div>
-                            {booking.remarks && (
-                              <div className="flex items-start">
-                                <Star className="h-4 w-4 text-purple-400 mr-2 mt-0.5" />
-                                <span className="text-purple-200">
-                                  Notes: {booking.remarks}
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Client Details */}
-                        <div>
-                          <h4 className="text-lg font-bold text-purple-300 mb-3 flex items-center">
-                            <User className="h-5 w-5 mr-2" />
-                            Client Information
-                          </h4>
-                          {booking.userProfile ? (
-                            <div className="space-y-2 text-sm">
-                              <div className="flex items-center">
-                                <User className="h-4 w-4 text-purple-400 mr-2" />
-                                <span className="text-purple-200">
-                                  {booking.userProfile.fullname}
-                                </span>
-                              </div>
-                              <div className="flex items-center">
-                                <Mail className="h-4 w-4 text-purple-400 mr-2" />
-                                <span className="text-purple-200">
-                                  {booking.userProfile.email}
-                                </span>
-                              </div>
-                              <div className="flex items-center">
-                                <Phone className="h-4 w-4 text-purple-400 mr-2" />
-                                <span className="text-purple-200">
-                                  {booking.userProfile.phone || "Not provided"}
-                                </span>
-                              </div>
-                              <div className="flex items-center">
-                                <Crown className="h-4 w-4 text-purple-400 mr-2" />
-                                <Badge
-                                  variant={
-                                    booking.userProfile.paymentPlan ===
-                                    "premium"
-                                      ? "default"
-                                      : "secondary"
-                                  }
-                                  className="text-xs"
-                                >
-                                  {booking.userProfile.paymentPlan}
-                                </Badge>
-                              </div>
-                            </div>
-                          ) : (
-                            <p className="text-purple-300/50 text-sm">
-                              Loading client details...
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                      <div className="mt-4">
-                        <Button
-                          className="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold shadow-lg transition-all duration-300"
-                          onClick={async () => {
-                            if (!window.confirm('Mark this booking as complete and remove? This action cannot be undone.')) return;
-                            setBookingsLoading(true);
-                            try {
-                              const user = auth.currentUser;
-                              if (!user) throw new Error('Not authenticated');
-                              const idToken = await user.getIdToken();
-                              const res = await fetch('/api/cancelBooking', {
-                                method: 'POST',
-                                headers: {
-                                  'Content-Type': 'application/json',
-                                  Authorization: `Bearer ${idToken}`,
-                                },
-                                body: JSON.stringify({ bookingId: booking.id }),
-                              });
-                              if (!res.ok) {
-                                const { error } = await res.json();
-                                throw new Error(error || 'Failed to remove booking');
-                              }
-                              setBookings(bookings => bookings.filter(b => b.id !== booking.id));
-                              setSelectedDateBookings(selectedDateBookings => selectedDateBookings.filter(b => b.id !== booking.id));
-                            } catch (err) {
-                              alert((err as any).message || 'Error removing booking');
-                            } finally {
-                              setBookingsLoading(false);
-                            }
-                          }}
-                        >
-                          Mark as complete and remove
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+        {/* Booking Details Modal - Only render when needed */}
+        <BookingDetailsModal
+          showModal={showModal}
+          selectedDate={selectedDate}
+          selectedDateBookings={selectedDateBookings}
+          setShowModal={setShowModal}
+          setBookings={setBookings}
+          setSelectedDateBookings={setSelectedDateBookings}
+        />
       </div>
     </div>
   );
