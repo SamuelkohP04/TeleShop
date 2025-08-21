@@ -3,12 +3,17 @@ import Stripe from "stripe";
 import { getFirestore } from "firebase-admin/firestore";
 import validator from "validator";
 
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+// Force dynamic rendering for this API route
+export const dynamic = 'force-dynamic';
+
+const stripeSecretKey = process.env.TEST_ENVIRONMENT === 'production'
+  ? process.env.PROD_STRIPE_SECRET_KEY
+  : process.env.STRIPE_SECRET_KEY;
 if (!stripeSecretKey) {
-  throw new Error("STRIPE_SECRET_KEY is not set in environment variables");
+  throw new Error("Stripe secret key is not set in environment variables");
 }
 const stripe = new Stripe(stripeSecretKey, {
-  apiVersion: "2025-07-30.basil",
+  apiVersion: "2025-06-30.basil",
 });
 
 export async function GET(req: NextRequest) {
