@@ -37,6 +37,8 @@
     "express": "^4.21.1",
     "firebase": "^11.10.0",
     "firebase-admin": "^13.4.0",
+    "firebase-auth-lite": "^0.8.9",
+    "firebase-firestore-lite": "^1.0.3",
     "framer-motion": "^12.19.2",
     "jose": "^4.15.9",
     "lucide-react": "^0.460.0",
@@ -61,6 +63,7 @@
     }
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250819.0",
     "@opennextjs/cloudflare": "^1.6.5",
     "@types/node": "^18.18.0",
     "@types/react": "^18.2.21",

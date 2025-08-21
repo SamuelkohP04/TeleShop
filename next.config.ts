@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
   },
 };
 
-// Only initialize in development and handle the import properly
+
 if (process.env.NODE_ENV === 'development') {
   try {
     // Dynamic import to avoid ESM issues
