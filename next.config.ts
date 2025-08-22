@@ -11,4 +11,17 @@ const nextConfig: NextConfig = {
   },
 };
 
+
+if (process.env.NODE_ENV === 'development') {
+  try {
+    // Dynamic import to avoid ESM issues
+    import("@opennextjs/cloudflare").then(({ initOpenNextCloudflareForDev }) => {
+      initOpenNextCloudflareForDev();
+    }).catch(console.warn);
+  } catch (error) {
+    console.warn('OpenNext dev initialization failed:', error);
+  }
+}
+
+
 export default nextConfig;

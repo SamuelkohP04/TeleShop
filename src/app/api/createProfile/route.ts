@@ -1,19 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getFirestore } from "firebase-admin/firestore";
-import { adminAuth } from "@/lib/firebaseAdmin";
+import { Database } from 'firebase-firestore-lite';
+import Auth from 'firebase-auth-lite';
 
 export async function POST(req: NextRequest) {
+  interface CreateProfileRequest {
+    fullname: string;
+    username: string;
+    dob?: Date;
+    phone: string;
+    email: string;
+  }
+
   try {
     const authHeader = req.headers.get("authorization") || "";
     const match = authHeader.match(/^Bearer (.+)$/);
     if (!match) return NextResponse.json({ error: "No token provided" }, { status: 401 });
-    const idToken = match[1];
-    const decoded = await adminAuth.verifyIdToken(idToken);
-    const uid = decoded.uid;
+    
+    const auth = new Auth({
+      apiKey: process.env.FIREBASE_API_KEY ?? "string"
+    });
     const body = await req.json();
-    const { fullname, username, dob, phone, email } = body;
-    const db = getFirestore();
-    await db.collection("users").doc(uid).set({
+
+    const { fullname, username, dob, phone, email } = body as CreateProfileRequest;
+    const db = new Database({ projectId: process.env.FIREBASE_PROJECT_ID ?? "string", auth });
+    
+    const ref = db.ref('users');
+    await ref.set({
       fullname,
       username,
       dob: dob ? new Date(dob) : null,
