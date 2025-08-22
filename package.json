@@ -37,6 +37,8 @@
     "express": "^4.21.1",
     "firebase": "^11.10.0",
     "firebase-admin": "^13.4.0",
+    "firebase-admin-rest": "^0.2.4",
+    "firebase-auth-cloudflare-workers": "^2.0.6",
     "firebase-auth-lite": "^0.8.9",
     "firebase-firestore-lite": "^1.0.3",
     "framer-motion": "^12.19.2",
