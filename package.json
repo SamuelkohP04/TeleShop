@@ -41,6 +41,7 @@
     "firebase-auth-cloudflare-workers": "^2.0.6",
     "firebase-auth-lite": "^0.8.9",
     "firebase-firestore-lite": "^1.0.3",
+    "firebase-rest-firestore": "^1.5.0",
     "framer-motion": "^12.19.2",
     "jose": "^4.15.9",
     "lucide-react": "^0.460.0",
