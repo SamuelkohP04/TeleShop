@@ -10,24 +10,24 @@ A project that integrates a Telegram bot and a Next.js website for managing appo
 ## ⚙️ Technologies used
 Click [here](https://app.diagrams.net/?src=about#G1Bc7YP-3i8AsA31N5bOQry-a5MI5n74n3#%7B%22pageId%22%3A%22ZgpZzdNCQvJGO9xpxhlk%22%7D) to view the full technical architecture on Draw.io.
 
-### Front-End:
+#### Front-End:
 - React
 - ESLint
 - Tailwind CSS
 - ShadCn
 
-### Backend:
+#### Backend:
 - Node/Express JS
 - Stripe (Using Stripe CLI for Local Development)
 - Telegraf (Telegram Bot Framework)
 
-### Database & Production:
+#### Database & Production:
 - Firebase Libraries
     - Firebase-REST-Firestore (View documentation [here](https://github.com/nabettu/firebase-rest-firestore))
     - Firebase-Auth-Cloudflare-Workers (View documentation [here](https://www.npmjs.com/package/firebase-auth-cloudflare-workers?activeTab=readme#run-example-code))
 - Cloudflare Workers (View documentation [here](https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs/))
 
-### Other Development Tools Used:
+#### Other Development Tools Used:
 - Jira (Project Management)
 - CodeRabbit (AI Code Reviewer upon Pull Request) (View Documentation [here](https://www.coderabbit.ai/))
 - GitHub Copilot (Code Suggestions)
