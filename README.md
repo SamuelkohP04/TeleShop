@@ -13,7 +13,7 @@ A project that integrates a Telegram bot and a Next.js website for managing appo
 
 
 
-## ⚙️ Technologies used
+## 🧑‍💻 Technologies used
 Click [here](https://app.diagrams.net/?src=about#G1Bc7YP-3i8AsA31N5bOQry-a5MI5n74n3#%7B%22pageId%22%3A%22ZgpZzdNCQvJGO9xpxhlk%22%7D) to view the full technical architecture on Draw.io.
 
 #### Front-End:
@@ -40,7 +40,7 @@ Click [here](https://app.diagrams.net/?src=about#G1Bc7YP-3i8AsA31N5bOQry-a5MI5n7
   
 ---
 
-## Features
+## ⚙️ Features
 - [x] Login & signup for account on the website
 
 - [x] Send feedback via feedback form in FAQ section
