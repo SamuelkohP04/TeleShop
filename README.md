@@ -19,7 +19,7 @@ Click [here](https://app.diagrams.net/?src=about#G1Bc7YP-3i8AsA31N5bOQry-a5MI5n7
 - Stripe (Using Stripe CLI for Local Development)
 - Telegraf (Telegram Bot Framework)
 
-### Database & Production 
+### Database & Production:
 - Firebase Libraries
     - Firebase-REST-Firestore (View documentation [here](https://github.com/nabettu/firebase-rest-firestore))
     - Firebase-Auth-Cloudflare-Workers (View documentation [here](https://www.npmjs.com/package/firebase-auth-cloudflare-workers?activeTab=readme#run-example-code))
@@ -49,3 +49,12 @@ Optimizes the build for NextJS.
 `npm run preview`
 - Builds the app for production in the `.open-next` folder.  
 Optimizes the build for deployment for Cloudflare Workers.
+
+
+## 🤝 Credits
+- SamuelKohP04 (Lead Software Developer) 
+- Ang-Wei-Liang (Software Developer - Web Development)
+- kohct1 (Software Developer - Web Development)
+- WireNotCable (Software Developer - Bot Development)
+- APandamonium1 (Software Developer - Bot Development)
+- Cheryl Neo (UI/UX Designer)
