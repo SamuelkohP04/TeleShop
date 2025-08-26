@@ -52,7 +52,8 @@ Optimizes the build for deployment for Cloudflare Workers.
 
 
 ## 🤝 Credits
-- SamuelKohP04 (Lead Software Developer) 
+- SamuelKohP04 (Lead Software Developer)
+- lkn120305 (Software Developer)
 - Ang-Wei-Liang (Software Developer - Web Development)
 - kohct1 (Software Developer - Web Development)
 - WireNotCable (Software Developer - Bot Development)
