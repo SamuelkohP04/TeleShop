@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { EmulatorEnv } from "firebase-auth-cloudflare-workers";
 import { Auth, WorkersKVStoreSingle } from "firebase-auth-cloudflare-workers";
-import { KVNamespace } from "@cloudflare/workers-types/experimental";
+import { ExecutionContext, FetchEvent, KVNamespace } from "@cloudflare/workers-types/experimental";
 import { createFirestoreClient } from "firebase-rest-firestore";
-
+import { Hono } from 'hono';
+import { getCookie, setCookie } from 'hono/cookie';
+import { csrf } from 'hono/csrf';
+import { html } from 'hono/html';
 
 interface Bindings extends EmulatorEnv {
   PROJECT_ID: string
@@ -11,25 +14,31 @@ interface Bindings extends EmulatorEnv {
   PUBLIC_JWK_CACHE_KV: KVNamespace
   FIREBASE_AUTH_EMULATOR_HOST: string
 }
-
-const verifyJWT = async (req: Request, env: Bindings): Promise<any> => {
-  const authorization = req.headers.get('Authorization')
-  if (authorization === null) {
-    throw new Error('No authorization header')
-  }
-  
-  const jwt = authorization.replace(/Bearer\s+/i, "")
-  const auth = Auth.getOrInitialize(
-    env.PROJECT_ID,
-    WorkersKVStoreSingle.getOrInitialize(env.PUBLIC_JWK_CACHE_KEY, env.PUBLIC_JWK_CACHE_KV)
-  )
-  
-  // This returns the decoded token data, not a Response
-  const firebaseToken = await auth.verifyIdToken(jwt, true)
-  console.log("Firebase token:", firebaseToken);
-  // Return the actual token data instead of wrapping in Response
-  return firebaseToken
+export interface Env {
+  PUBLIC_JWK_CACHE_KEY: KVNamespace; // Replace with your actual KV binding name
 }
+
+export async function verifyJWT(request: Request, env: Env) {
+    if (!env.PUBLIC_JWK_CACHE_KEY) {
+      console.error("KV binding PUBLIC_JWK_CACHE_KEY is missing!");
+    }
+    // read a key-value pair
+    const value = await env.PUBLIC_JWK_CACHE_KEY.get('KEY');
+    console.log("Value from KV:", value); 
+    // list all key-value pairs
+    const allKeys = await env.PUBLIC_JWK_CACHE_KEY.list();
+    console.log("All keys in KV:", allKeys.keys);
+
+    // return a Workers response
+    return new Response(
+      JSON.stringify({
+        value: value,
+        allKeys: allKeys,
+      }),
+    );
+  } 
+
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -45,43 +54,43 @@ export async function POST(req: NextRequest) {
     const env: Bindings = {
       PROJECT_ID: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "",
       PUBLIC_JWK_CACHE_KEY: process.env.PUBLIC_JWK_CACHE_KEY || "",
-      PUBLIC_JWK_CACHE_KV: {} as KVNamespace, // You'll need to mock this
+      PUBLIC_JWK_CACHE_KV: process.env.PUBLIC_JWK_CACHE_KV as unknown as KVNamespace,
       FIREBASE_AUTH_EMULATOR_HOST: process.env.FIREBASE_AUTH_EMULATOR_HOST || "",
     };
-
+    
     // Now this returns the decoded token directly
     const decoded = await verifyJWT(req as any, env);
     console.log("Decoded token:", decoded);
     
-    // Extract uid from the decoded token
-    const uid = decoded.uid;
-    console.log("User UID:", uid);
+    // // Extract uid from the decoded token
+    // const uid = decoded.uid;
+    // console.log("User UID:", uid);
     
-    const body = await req.json();
-    const { fullname, username, dob, phone, email } = body;
+    // const body = await req.json();
+    // const { fullname, username, dob, phone, email } = body;
     
-    const firestore = createFirestoreClient({
-      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "",
-      privateKey: process.env.FIREBASE_PRIVATE_KEY || "",
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL || "",
-    });
+    // const firestore = createFirestoreClient({
+    //   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "",
+    //   privateKey: process.env.FIREBASE_PRIVATE_KEY || "",
+    //   clientEmail: process.env.FIREBASE_CLIENT_EMAIL || "",
+    // });
 
-    await firestore.collection("users").doc(uid).set({
-      fullname,
-      username,
-      dob: dob ? new Date(dob) : null,
-      phone,
-      email,
-      createdAt: new Date(),
-      paymentPlan: "Basic",
-      isAdmin: false,
-    });
-    console.log("User profile created successfully");
-    return NextResponse.json({ 
-      success: true, 
-      uid,
-      user: decoded // Include the unpacked token data in response
-    }, { status: 201 });
+    // await firestore.collection("users").doc(uid).set({
+    //   fullname,
+    //   username,
+    //   dob: dob ? new Date(dob) : null,
+    //   phone,
+    //   email,
+    //   createdAt: new Date(),
+    //   paymentPlan: "Basic",
+    //   isAdmin: false,
+    // });
+    // console.log("User profile created successfully");
+    // return NextResponse.json({ 
+    //   success: true, 
+    //   uid,
+    //   user: decoded // Include the unpacked token data in response
+    // }, { status: 201 });
   } 
   catch (error: any) {
     console.error("Error in POST:", error);
