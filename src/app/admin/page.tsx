@@ -84,7 +84,7 @@ const MysticalAdminHeader = ({ profile, onLogout, router }: any) => (
     <div className="flex items-center space-x-4">
       <Button
         onClick={() => router.push("/dashboard")}
-        variant="outline"
+        // variant="outline"
         className="border-purple-500/50 text-purple-300 hover:bg-purple-500/20 hover:border-purple-400 transition-all duration-300"
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
@@ -92,7 +92,7 @@ const MysticalAdminHeader = ({ profile, onLogout, router }: any) => (
       </Button>
       <Button
         onClick={onLogout}
-        variant="outline"
+        // variant="outline"
         className="border-red-500/50 text-red-300 hover:bg-red-500/20 hover:border-red-400 transition-all duration-300"
       >
         <LogOut className="h-4 w-4 mr-2" />

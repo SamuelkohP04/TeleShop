@@ -22,7 +22,7 @@
     /* Type Checking */
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["node"],
+    "types": ["node", ""],
 
     /* Plugins */
     "plugins": [
