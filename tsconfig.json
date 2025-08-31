@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     /* Language and Environment */
+    "allowImportingTsExtensions": true,
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "jsx": "preserve",
