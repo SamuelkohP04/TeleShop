@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Sparkle your spirit with our enchanting crystals!",
 };
 
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "../components/ui/toaster";
 import { Lora } from "next/font/google";
 
 const lora = Lora({

@@ -4,17 +4,17 @@ import { useState, useEffect } from "react";
 
 import { useRouter } from "next/navigation";
 
-import ProductCard from "@/components/ProductCard";
+import ProductCard from "../components/ProductCard";
 import { Product } from "../types";
 
-import { AspectRatio } from "@/components/ui/aspect-ratio"
+import { AspectRatio } from "../components/ui/aspect-ratio"
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select";
+} from "../components/ui/select";
 import {
     Card,
     CardContent,
@@ -22,8 +22,8 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card";
-import Navbar from "@/components/Navbar";
+} from "../components/ui/card";
+import Navbar from "../components/Navbar";
 
 function Home() {
     const [products, setProducts] = useState<Product[]>([]);

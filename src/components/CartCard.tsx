@@ -11,7 +11,7 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card";
+} from "../components/ui/card";
 import { Product } from "@/types"; // Adjust the import path as necessary
 
 function CartCard({ product, setCart }: { product : Product, setCart: any }) {

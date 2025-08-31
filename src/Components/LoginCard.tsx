@@ -11,8 +11,8 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+} from "../components/ui/card";
+import { Input } from "../components/ui/input";
 import { auth } from "@/lib/firebaseClient";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { format } from "date-fns";

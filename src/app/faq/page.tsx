@@ -3,7 +3,7 @@
 import { useState, memo, useCallback } from "react";
 import * as Accordion from "@radix-ui/react-accordion";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../components/ui/button";
 
 import Navbar from "@/app/(site)/Navbar";
 import Footer from "@/app/(site)/Footer";

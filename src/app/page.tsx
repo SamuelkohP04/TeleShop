@@ -6,7 +6,7 @@ import HeroSection from "@/app/(site)/Hero";
 import MakerIntro from "@/app/(site)/MakerIntro";
 import Navbar from "@/app/(site)/Navbar";
 import TestimonialsPage from "@/app/(site)/Testimonials";
-import InteractiveSections from "@/components/InteractiveSections";
+import InteractiveSections from "../components/InteractiveSections";
 
 export const metadata: Metadata = {
   title: "Awareness Living",
