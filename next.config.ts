@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-import { webpack } from "next/dist/compiled/webpack/webpack";
+// import { webpack } from "next/dist/compiled/webpack/webpack";
 
 const nextConfig: NextConfig = {
   output: "export", // enables static exports - REMOVED to support API routes
@@ -12,15 +12,15 @@ const nextConfig: NextConfig = {
   },
 };
 
-const path = require('path');
-module.exports = {
-  webpack: (config: webpack.Configuration) => {
-    config.resolve.alias = {
-      '@': path.resolve(__dirname, 'src'),
-    };
-    return config;
-  },
-};
+// const path = require('path');
+// module.exports = {
+//   webpack: (config: webpack.Configuration) => {
+//     config.resolve.alias = {
+//       '@': path.resolve(__dirname, 'src'),
+//     };
+//     return config;
+//   },
+// };
 
 // if (process.env.NODE_ENV === 'development') {
 //   try {
