@@ -14,12 +14,12 @@ const nextConfig: NextConfig = {
 
 const path = require('path');
 
-module.exports = {
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src/*'),
-    },
-  },
+(nextConfig as any).webpack = (config: any) => {
+  config.resolve = config.resolve || {};
+  config.resolve.alias = {
+      '@': path.resolve(__dirname, 'src'),
+  };
+  return config;
 };
 
 // if (process.env.NODE_ENV === 'development') {
