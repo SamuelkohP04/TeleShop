@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     /* Language and Environment */
-    "allowImportingTsExtensions": true,
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "jsx": "preserve",
@@ -9,10 +8,11 @@
     "skipLibCheck": true,
     "noEmit": true,
     "incremental": true,
+    "allowImportingTsExtensions": true,
 
     /* Modules */
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    "module": "commonjs",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "isolatedModules": true,
