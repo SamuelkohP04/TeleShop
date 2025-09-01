@@ -18,7 +18,7 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./src/*", "../../packages/ui/src/*"],
       "@/styles/*": ["styles/*"],
       "@/components/*": ["components/*"]
     },
