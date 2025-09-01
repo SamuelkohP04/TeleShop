@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebaseClient";
-import { Card, CardContent, CardHeader } from "../../components/ui/card.tsx";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Badge } from "../../components/ui/badge";
 import Calendar from "react-calendar";
