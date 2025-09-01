@@ -11,7 +11,7 @@ import {
     CardDescription,
     CardHeader,
     CardTitle,
-} from "../components/ui/card"; // ⛔️ Removed unused CardFooter
+} from "@/components/ui/card"; // ⛔️ Removed unused CardFooter
 // import { useToast } from "@/hooks/use-toast"; ⛔️ Removed unused
 
 interface Product {

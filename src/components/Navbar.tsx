@@ -16,7 +16,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "../components/ui/dialog";
+} from "@/components/ui/dialog";
 import {
     Sheet,
     SheetContent,
@@ -24,7 +24,7 @@ import {
     SheetHeader,
     SheetTitle,
     SheetTrigger,
-} from "../components/ui/sheet";
+} from "@/components/ui/sheet";
 import CartCard from "./CartCard";
 
 import { Product } from "../types";

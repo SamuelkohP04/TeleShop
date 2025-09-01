@@ -6,8 +6,8 @@ import { useRouter, useParams } from "next/navigation";
 
 import { auth } from "@/app/firebase/config";
 
-import Navbar from "../../../components/Navbar";
-import { Button } from "../../../components/ui/button";
+import Navbar from "@/components/Navbar";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
 import { Product } from "../../../types";
