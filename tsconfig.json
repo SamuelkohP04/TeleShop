@@ -9,7 +9,6 @@
     "skipLibCheck": true,
     "noEmit": true,
     "incremental": true,
-    "allowImportingTsExtensions": true,
 
     /* Modules */
     "module": "commonjs",
@@ -18,7 +17,7 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "paths": {
-      "@/*": ["./src/*", "../../packages/ui/src/*"],
+      "@/*": ["*"],
       "@/styles/*": ["styles/*"],
       "@/components/*": ["components/*"]
     },
