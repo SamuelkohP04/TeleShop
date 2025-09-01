@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     /* Language and Environment */
+    "baseUrl": "src/",
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "jsx": "preserve",
@@ -17,7 +18,9 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/styles/*": ["styles/*"],
+      "@/components/*": ["components/*"]
     },
 
     /* Type Checking */

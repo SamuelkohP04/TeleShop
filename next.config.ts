@@ -12,15 +12,15 @@ const nextConfig: NextConfig = {
   },
 };
 
-const path = require('path');
+// const path = require('path');
 
-(nextConfig as any).webpack = (config: any) => {
-  config.resolve = config.resolve || {};
-  config.resolve.alias = {
-      '@': path.resolve(__dirname, 'src'),
-  };
-  return config;
-};
+// (nextConfig as any).webpack = (config: any) => {
+//   config.resolve = config.resolve || {};
+//   config.resolve.alias = {
+//       '@': path.resolve(__dirname, 'src'),
+//   };
+//   return config;
+// };
 
 // if (process.env.NODE_ENV === 'development') {
 //   try {
