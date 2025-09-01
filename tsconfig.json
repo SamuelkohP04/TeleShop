@@ -11,8 +11,8 @@
     "incremental": true,
 
     /* Modules */
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "isolatedModules": true,
@@ -23,7 +23,7 @@
     /* Type Checking */
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["node", ""],
+    "types": ["node"],
 
     /* Plugins */
     "plugins": [
