@@ -78,7 +78,7 @@
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
-    "typescript": "^4.9.5",
+    "typescript": "^5.9.2",
     "wrangler": "^4.28.1"
   },
   "eslintConfig": {
