@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 import { webpack } from "next/dist/compiled/webpack/webpack";
 
 const nextConfig: NextConfig = {
-  output: "export", // enables static exports - REMOVED to support API routes
+  // output: "export", // enables static exports - REMOVED to support API routes
   serverExternalPackages: [ "@prisma/client", ".prisma/client", "postgres", "jose" ],
   reactStrictMode: true,
   eslint: {
