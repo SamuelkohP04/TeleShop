@@ -11,6 +11,9 @@ export async function register() {
     usage of import in a register function:
   */
   if (process.env.NEXT_RUNTIME === 'nodejs') {
-    await import('../instrumentation-node')
+    await import('./instrumentation-node')
+  }
+  if (process.env.NEXT_RUNTIME === 'edge') {
+    await import('./instrumentation-edge')  // This file doesn't exist!
   }
 }

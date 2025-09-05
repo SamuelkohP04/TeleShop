@@ -1,7 +1,5 @@
-import type { NextConfig } from "next";
-import { webpack } from "next/dist/compiled/webpack/webpack";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   output: "export", // enables static exports - REMOVED to support API routes
   serverExternalPackages: [ "@prisma/client", ".prisma/client", "postgres", "jose" ],
   reactStrictMode: true,
@@ -9,16 +7,6 @@ const nextConfig: NextConfig = {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
-  },
-};
-
-const path = require('path');
-module.exports = {
-  webpack: (config: webpack.Configuration) => {
-    config.resolve.alias = {
-      '@': path.resolve(__dirname, 'src'),
-    };
-    return config;
   },
 };
 
