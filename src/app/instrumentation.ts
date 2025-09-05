@@ -1,8 +1,19 @@
 export async function register() {
-  if (process.env.NEXT_RUNTIME === "nodejs") {
-    const { join } = await import("path");
-    const { cwd, exit, platform } = await import("process");
-    console.log(join("a", "b"));
-    console.log(cwd());
+  /*
+    This function dynamically imports and registers the
+    appropriate instrumentation module based on the 
+    runtime.
+
+    Documentation: https://nextjs.org/docs/app/guides/instrumentation
+
+    The documentation recommends importing files using JavaScript import syntax
+    within your register function. The following example demonstrates a basic
+    usage of import in a register function:
+  */
+  if (process.env.NEXT_RUNTIME === 'nodejs') {
+    await import('./instrumentation-node')
+  }
+  if (process.env.NEXT_RUNTIME === 'edge') {
+    await import('./instrumentation-edge')  // This file doesn't exist!
   }
 }
