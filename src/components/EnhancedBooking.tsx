@@ -70,9 +70,11 @@ const TIME_SLOTS = [
   { time: "16:00", label: "4:00 PM - 4:45 PM", available: true },
 ];
 
+export type Service = (typeof SERVICES)[number];
+
 export default function EnhancedBooking() {
   const [step, setStep] = useState(1);
-  const [selectedService, setSelectedService] = useState<any>(null);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [consultationType, setConsultationType] = useState<string>("online");
   const [date, setDate] = useState<Date | null>(null);
   const [timeSlot, setTimeSlot] = useState<string>("");
@@ -85,6 +87,9 @@ export default function EnhancedBooking() {
     setLoading(true);
     setError(null);
     try {
+      if (!selectedService) {
+        throw new Error("Please select a service");
+      }
       const user = auth.currentUser;
       if (!user) throw new Error("Not authenticated");
       const idToken = await user.getIdToken();

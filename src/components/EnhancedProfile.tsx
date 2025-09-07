@@ -30,21 +30,24 @@ import {
   ArrowLeft,
   Gem,
   Moon,
-  Sun,
+  // Sun,
   Sparkles,
   Eye,
 } from "lucide-react";
+import { Timestamp } from "firebase-admin/firestore";
 
 interface ProfileData {
   fullname: string;
   username: string;
   email: string;
   phone: string;
-  dob: any;
-  createdAt: any;
+  dob: string;
+  createdAt: Timestamp;
   paymentPlan: string;
   profileImage?: string;
 }
+
+
 
 export default function EnhancedProfile() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
