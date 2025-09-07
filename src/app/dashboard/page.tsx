@@ -29,6 +29,8 @@ import {
   Crown,
 } from "lucide-react";
 
+// Extend Booking with optional consultationType used by dashboard UI
+type DashboardBooking = Booking & { consultationType?: string | null };
 
 const TIME_SLOTS = [
   "10:00",
@@ -37,6 +39,11 @@ const TIME_SLOTS = [
   "15:00",
   "16:00",
 ];
+
+// Type guard for DashboardBooking
+const hasConsultationType = (b: Booking | DashboardBooking): b is DashboardBooking => {
+  return typeof (b as any).consultationType !== "undefined";
+};
 
 // Static components that don't need re-rendering
 const MysticalBackground = () => (
@@ -59,7 +66,7 @@ const MysticalBackground = () => (
   </div>
 );
 
-const MysticalHeader = ({ profile, onUpgrade, onLogout }: { profile: UserProfile; onUpgrade: () => void; onLogout: () => void }) => (
+const MysticalHeader = ({ profile, onUpgrade, onLogout }: { profile: UserProfile | null; onUpgrade: () => void; onLogout: () => void }) => (
   <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8 p-4 md:p-6 bg-black/20 backdrop-blur-md rounded-2xl border border-purple-500/30 shadow-2xl">
     <div className="flex items-center space-x-4">
       <Gem className="h-10 w-10 text-purple-300 animate-pulse" />
@@ -165,10 +172,10 @@ const NavigationCards = ({ router }: { router: ReturnType<typeof useRouter> }) =
 );
 
 // Memoized calendar component
-const BookingsCalendar = ({ bookings, onDateClick }: { bookings: Booking[]; onDateClick: (date: Date) => void }) => {
+const BookingsCalendar = ({ bookings, onDateClick }: { bookings: DashboardBooking[]; onDateClick: (date: Date) => void }) => {
   const tileContent = useCallback(({ date, view }: { date: Date; view: "month" | "year" | "decade" | "century" }) => {
     if (view === "month") {
-      const count = bookings.filter((b: Booking) => {
+      const count = bookings.filter((b: DashboardBooking) => {
         if (!b.date) return false;
         const ymd = date.toISOString().slice(0, 10);
         return b.date.slice(0, 10) === ymd;
@@ -203,11 +210,11 @@ export default function DashboardPage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [bookings, setBookings] = useState<DashboardBooking[]>([]);
   const [bookingsLoading, setBookingsLoading] = useState(false);
   const [bookingsError, setBookingsError] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [modalBooking, setModalBooking] = useState<Booking[] | null>(null);
+  const [modalBooking, setModalBooking] = useState<DashboardBooking[] | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [rescheduleMode, setRescheduleMode] = useState(false);
   const [rescheduleDate, setRescheduleDate] = useState<Date | null>(null);
@@ -252,7 +259,7 @@ export default function DashboardPage() {
 
   // Memoized date click handler
   const handleDateClick = useCallback((date: Date) => {
-    const bookingsOnDate = bookings.filter((b) => {
+    const bookingsOnDate = bookings.filter((b: DashboardBooking) => {
       if (!b.date) return false;
       const ymd = date.toISOString().slice(0, 10);
       return b.date.slice(0, 10) === ymd;
@@ -279,17 +286,22 @@ export default function DashboardPage() {
         throw new Error(error || "Failed to fetch profile");
       }
       const data = await res.json();
-      const convertTimestamp = (ts: any) => {
+      const convertTimestamp = (ts: unknown) => {
         if (!ts) return "-";
         if (typeof ts === "string") return ts;
-        if (ts._seconds) return new Date(ts._seconds * 1000).toLocaleString();
-        if (ts.seconds) return new Date(ts.seconds * 1000).toLocaleString();
+        if (typeof ts === "object" && ts !== null) {
+          const maybe = ts as { _seconds?: number; seconds?: number };
+          if (typeof maybe._seconds === "number") return new Date(maybe._seconds * 1000).toLocaleString();
+          if (typeof maybe.seconds === "number") return new Date(maybe.seconds * 1000).toLocaleString();
+        }
         return "-";
       };
       setProfile({
-        ...data,
-        dob: convertTimestamp(data.dob),
-        createdAt: convertTimestamp(data.createdAt),
+        ...(data as UserProfile),
+        dob: convertTimestamp((data as any).dob),
+        // createdAt may not be on UserProfile; keep safe conversion if present
+        // @ts-expect-error dynamic field from backend
+        createdAt: convertTimestamp((data as any).createdAt),
       });
     } catch (err: unknown) {
       setError((err as Error).message);
@@ -313,7 +325,7 @@ export default function DashboardPage() {
         throw new Error(error || "Failed to fetch bookings");
       }
       const data = await res.json();
-      setBookings(data.bookings || []);
+      setBookings((data.bookings as DashboardBooking[]) || []);
     } catch (err: unknown) {
       setBookingsError((err as Error).message);
     } finally {
@@ -384,7 +396,7 @@ export default function DashboardPage() {
 
       <div className="max-w-6xl mx-auto relative z-10">
         <MysticalHeader 
-          profile={profile as UserProfile} 
+          profile={profile} 
           onUpgrade={handleUpgrade} 
           onLogout={handleLogout} 
         />
@@ -477,6 +489,20 @@ export default function DashboardPage() {
 }
 
 // Separate modal component to reduce main component complexity
+type BookingModalProps = {
+  modalBooking: DashboardBooking[] | null;
+  selectedDate: Date | null;
+  showModal: boolean;
+  setShowModal: (value: boolean) => void;
+  setBookings: React.Dispatch<React.SetStateAction<DashboardBooking[]>>;
+  bookings: DashboardBooking[];
+  setRescheduleMode: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalError: (value: string | null) => void;
+  modalLoading: boolean;
+  setModalLoading: (value: boolean) => void;
+  modalError: string | null;
+};
+
 const BookingModal = ({ 
   modalBooking, 
   selectedDate, 
@@ -489,12 +515,12 @@ const BookingModal = ({
   modalLoading,
   setModalLoading,
   modalError
-}: any) => {
+}: BookingModalProps) => {
   const [calendarRescheduleDate, setCalendarRescheduleDate] = useState<Date | null>(null);
   const [rescheduleTimeSlot, setRescheduleTimeSlot] = useState<string>("");
-  const [rescheduleMode, setRescheduleModeLocal] = useState<string | false>(false);
+  const [rescheduleBookingId, setRescheduleBookingId] = useState<string | false>(false);
 
-  const handleCancelBooking = useCallback(async (booking: any) => {
+  const handleCancelBooking = useCallback(async (booking: DashboardBooking) => {
     if (!window.confirm("Are you sure you want to cancel this booking? No refunds will be issued.")) return;
     
     setModalLoading(true);
@@ -515,7 +541,7 @@ const BookingModal = ({
         const { error } = await res.json();
         throw new Error(error || "Failed to cancel booking");
       }
-      setBookings(bookings.filter((b: any) => b.id !== booking.id));
+      setBookings(bookings.filter((b: DashboardBooking) => b.id !== booking.id));
       setShowModal(false);
     } catch (err: unknown) {
       setModalError((err as Error).message);
@@ -524,7 +550,7 @@ const BookingModal = ({
     }
   }, [setBookings, bookings, setShowModal, setModalLoading, setModalError]);
 
-  const handleRescheduleBooking = useCallback(async (booking: any, newDate: Date | null, newTimeSlot?: string) => {
+  const handleRescheduleBooking = useCallback(async (booking: DashboardBooking, newDate: Date | null, newTimeSlot?: string) => {
     if (!newDate) return;
     if (!window.confirm("Are you sure you want to reschedule this booking?")) return;
     
@@ -550,7 +576,7 @@ const BookingModal = ({
         throw new Error(error || "Failed to reschedule booking");
       }
       setBookings(
-        bookings.map((b: any) =>
+        bookings.map((b: DashboardBooking) =>
           b.id === booking.id
             ? {
                 ...b,
@@ -561,7 +587,7 @@ const BookingModal = ({
         )
       );
       setShowModal(false);
-      setRescheduleModeLocal(false);
+      setRescheduleBookingId(false);
       setCalendarRescheduleDate(null);
       setRescheduleTimeSlot("");
     } catch (err: unknown) {
@@ -579,7 +605,7 @@ const BookingModal = ({
             className="absolute top-4 right-4 text-purple-300 hover:text-white transition-colors"
             onClick={() => {
               setShowModal(false);
-              setRescheduleModeLocal(false);
+              setRescheduleBookingId(false);
               setModalError(null);
             }}
           >
@@ -597,7 +623,7 @@ const BookingModal = ({
         </div>
         
         {Array.isArray(modalBooking) &&
-          modalBooking.map((booking: any, idx: number) => (
+          modalBooking.map((booking: DashboardBooking, idx: number) => (
             <div
               key={booking.id}
               className="mb-6 p-4 bg-black/30 rounded-lg border border-purple-500/30 last:mb-0"
@@ -640,7 +666,7 @@ const BookingModal = ({
                     Meeting Type:
                   </span>
                   <p className="text-purple-100 text-sm">
-                    {booking.consultationType || "Not provided"}
+                    {hasConsultationType(booking) && booking.consultationType ? booking.consultationType : "Not provided"}
                   </p>
                 </div>
               </div>
@@ -652,7 +678,7 @@ const BookingModal = ({
                 </div>
               )}
               
-              {rescheduleMode === booking.id ? (
+              {rescheduleBookingId === booking.id ? (
                 <div className="space-y-4">
                   <div className="text-center">
                     <Calendar
@@ -695,7 +721,7 @@ const BookingModal = ({
                     <Button
                       variant="outline"
                       onClick={() => {
-                        setRescheduleModeLocal(false);
+                        setRescheduleBookingId(false);
                         setCalendarRescheduleDate(null);
                         setRescheduleTimeSlot("");
                       }}
@@ -719,7 +745,7 @@ const BookingModal = ({
                   <Button
                     variant="outline"
                     onClick={() => {
-                      setRescheduleModeLocal(booking.id);
+                      setRescheduleBookingId(booking.id);
                       setCalendarRescheduleDate(booking.date ? new Date(booking.date) : new Date());
                       setRescheduleTimeSlot(booking.timeSlot || "");
                     }}
