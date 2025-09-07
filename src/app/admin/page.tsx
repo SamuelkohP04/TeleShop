@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-type UserProfile = {
+export type UserProfile = {
   uid: string;
   fullname: string;
   username: string;
@@ -38,7 +38,7 @@ type UserProfile = {
   isAdmin: boolean;
 };
 
-type Booking = {
+export type Booking = {
   id: string;
   uid: string;
   service: string;

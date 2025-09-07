@@ -11,6 +11,10 @@ import { Button } from "@/components/ui/button";
 import { onAuthStateChanged } from "firebase/auth";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+
+// Importing Profiles
+import type { UserProfile } from "@/app/admin/page"
+import type { Booking } from "@/app/admin/page"
 import {
   Star,
   Moon,
@@ -23,6 +27,7 @@ import {
   Users,
   Crown,
 } from "lucide-react";
+
 
 const TIME_SLOTS = [
   "10:00",
@@ -53,7 +58,7 @@ const MysticalBackground = () => (
   </div>
 );
 
-const MysticalHeader = ({ profile, onUpgrade, onLogout }: any) => (
+const MysticalHeader = ({ profile, onUpgrade, onLogout }: { profile: Profile; onUpgrade: () => void; onLogout: () => void }) => (
   <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8 p-4 md:p-6 bg-black/20 backdrop-blur-md rounded-2xl border border-purple-500/30 shadow-2xl">
     <div className="flex items-center space-x-4">
       <Gem className="h-10 w-10 text-purple-300 animate-pulse" />
