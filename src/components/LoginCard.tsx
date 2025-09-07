@@ -86,16 +86,17 @@ function LoginCard() {
           } else {
             router.push("/dashboard");
           }
-        } catch (authError: any) {
+        } catch (authError: unknown) {
           // Handle specific Firebase auth errors
-          if (authError.code === 'auth/user-not-found') {
+          const code = (authError as { code?: string })?.code;
+          if (code === 'auth/user-not-found') {
             throw new Error("No account found with this email. Please sign up first or try Google sign-in if you used that method.");
-          } else if (authError.code === 'auth/wrong-password') {
+          } else if (code === 'auth/wrong-password') {
             throw new Error("Incorrect password. If you signed up with Google, please use Google sign-in instead.");
-          } else if (authError.code === 'auth/invalid-credential') {
+          } else if (code === 'auth/invalid-credential') {
             throw new Error("Invalid credentials. If you signed up with Google, please use Google sign-in instead.");
           } else {
-            throw authError;
+            throw (authError instanceof Error) ? authError : new Error("Authentication failed");
           }
         }
       } else {
@@ -236,14 +237,15 @@ function LoginCard() {
                   }
                 }
               } catch (err: unknown) {
-                let errorMessage = (err as Error).message;
+                const code = (err as { code?: string })?.code;
+                let errorMessage = (err as Error).message || "Google sign-in failed";
                 
                 // Handle specific Google sign-in errors
-                if (err.code === 'auth/account-exists-with-different-credential') {
+                if (code === 'auth/account-exists-with-different-credential') {
                   errorMessage = "An account already exists with this email using a different sign-in method. Please try signing in with email and password instead.";
-                } else if (err.code === 'auth/popup-closed-by-user') {
+                } else if (code === 'auth/popup-closed-by-user') {
                   errorMessage = "Sign-in was cancelled. Please try again.";
-                } else if (err.code === 'auth/popup-blocked') {
+                } else if (code === 'auth/popup-blocked') {
                   errorMessage = "Pop-up was blocked by your browser. Please allow pop-ups and try again.";
                 }
                 
