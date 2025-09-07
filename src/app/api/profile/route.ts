@@ -53,7 +53,7 @@ export async function PATCH(req: NextRequest) {
     // Server-side logging
     console.log(`[${new Date().toISOString()}] User ${uid} updated profile:`, Object.keys(updateData));
     return NextResponse.json(updateData, { status: 200 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 401 });
+  } catch (error: unknown) {
+    return NextResponse.json({ error: (error as Error).message }, { status: 401 });
   }
 }

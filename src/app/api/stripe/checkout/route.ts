@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
       },
     });
     return NextResponse.json({ url: session.url }, { status: 200 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 401 });
+  } catch (error: unknown) {
+    return NextResponse.json({ error: (error as Error).message }, { status: 401 });
   }
 } 

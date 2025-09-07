@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
     const snapshot = await db.collection("bookings").where("uid", "==", uid).orderBy("date", "desc").get();
     const bookings = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     return NextResponse.json({ bookings }, { status: 200 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 401 });
+  } catch (error: unknown) {
+    return NextResponse.json({ error: (error as Error).message }, { status: 401 });
   }
 } 
