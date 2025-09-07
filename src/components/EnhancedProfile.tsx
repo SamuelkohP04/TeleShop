@@ -61,6 +61,7 @@ type TimestampInput =
   | null 
   | undefined;
 
+import TimeStamp from "firebase/firestore"
 
 export default function EnhancedProfile() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
@@ -179,7 +180,7 @@ export default function EnhancedProfile() {
     }
   };
 
-  const formatDate = (ts: TimestampInput): string => {
+  const formatDate = (ts: typeof TimeStamp | TimestampInput) => {
     if (!ts) return "-";
     if (typeof ts === "string") return new Date(ts).toLocaleDateString();
   
