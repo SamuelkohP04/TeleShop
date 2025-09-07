@@ -17,11 +17,14 @@ export async function POST(req: NextRequest) {
     if (!doc.exists || doc.data()?.uid !== uid) {
       return NextResponse.json({ error: "Booking not found or unauthorized" }, { status: 403 });
     }
-    const updateData: any = { date: newDate };
+
+    // timeSlot is an optional parameter because we made updating the new time slot an "if".
+    const updateData: {date: string, timeSlot?: string} = { date: newDate };
+    
     if (newTimeSlot) updateData.timeSlot = newTimeSlot;
     await db.collection("bookings").doc(bookingId).update(updateData);
     return NextResponse.json({ success: true }, { status: 200 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    return NextResponse.json({ error: (error as Error).message}, { status: 500 });
   }
 } 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebaseClient";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -42,7 +42,7 @@ const TIME_SLOTS = [
 
 // Type guard for DashboardBooking
 const hasConsultationType = (b: Booking | DashboardBooking): b is DashboardBooking => {
-  return typeof (b as any).consultationType !== "undefined";
+  return typeof (b as { consultationType?: unknown }).consultationType !== "undefined";
 };
 
 // Static components that don't need re-rendering
@@ -216,8 +216,6 @@ export default function DashboardPage() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [modalBooking, setModalBooking] = useState<DashboardBooking[] | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const [rescheduleMode, setRescheduleMode] = useState(false);
-  const [rescheduleDate, setRescheduleDate] = useState<Date | null>(null);
   const [modalLoading, setModalLoading] = useState(false);
   const [modalError, setModalError] = useState<string | null>(null);
   const router = useRouter();
@@ -296,12 +294,13 @@ export default function DashboardPage() {
         }
         return "-";
       };
+      const dataObj = data as Record<string, unknown>;
       setProfile({
         ...(data as UserProfile),
-        dob: convertTimestamp((data as any).dob),
+        dob: convertTimestamp(dataObj["dob"]),
         // createdAt may not be on UserProfile; keep safe conversion if present
         // @ts-expect-error dynamic field from backend
-        createdAt: convertTimestamp((data as any).createdAt),
+        createdAt: convertTimestamp(dataObj["createdAt"]),
       });
     } catch (err: unknown) {
       setError((err as Error).message);
@@ -472,11 +471,9 @@ export default function DashboardPage() {
           <BookingModal
             modalBooking={modalBooking}
             selectedDate={selectedDate}
-            showModal={showModal}
             setShowModal={setShowModal}
             setBookings={setBookings}
             bookings={bookings}
-            setRescheduleMode={setRescheduleMode}
             setModalError={setModalError}
             modalLoading={modalLoading}
             setModalLoading={setModalLoading}
@@ -492,11 +489,9 @@ export default function DashboardPage() {
 type BookingModalProps = {
   modalBooking: DashboardBooking[] | null;
   selectedDate: Date | null;
-  showModal: boolean;
   setShowModal: (value: boolean) => void;
   setBookings: React.Dispatch<React.SetStateAction<DashboardBooking[]>>;
   bookings: DashboardBooking[];
-  setRescheduleMode: React.Dispatch<React.SetStateAction<boolean>>;
   setModalError: (value: string | null) => void;
   modalLoading: boolean;
   setModalLoading: (value: boolean) => void;
@@ -506,11 +501,9 @@ type BookingModalProps = {
 const BookingModal = ({ 
   modalBooking, 
   selectedDate, 
-  showModal, 
   setShowModal, 
   setBookings, 
   bookings,
-  setRescheduleMode,
   setModalError,
   modalLoading,
   setModalLoading,
@@ -623,7 +616,7 @@ const BookingModal = ({
         </div>
         
         {Array.isArray(modalBooking) &&
-          modalBooking.map((booking: DashboardBooking, idx: number) => (
+          modalBooking.map((booking: DashboardBooking) => (
             <div
               key={booking.id}
               className="mb-6 p-4 bg-black/30 rounded-lg border border-purple-500/30 last:mb-0"

@@ -67,7 +67,7 @@ const MysticalBackground = () => (
   </div>
 );
 
-const MysticalAdminHeader = ({ profile, onLogout, router }: { profile: UserProfile; onLogout: () => void | Promise<void>; router: ReturnType<typeof useRouter> }) => (
+const MysticalAdminHeader = ({ onLogout, router }: { profile: UserProfile; onLogout: () => void | Promise<void>; router: ReturnType<typeof useRouter> }) => (
   <motion.div
     initial={{ opacity: 0, y: -20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -192,7 +192,7 @@ const AdminCalendar = ({ bookings, onDateClick, selectedDate }: { bookings: Book
     });
   }, [bookings]);
 
-  const tileClassName = useCallback(({ date, view }: { date: Date; view: "month" | "year" | "decade" | "century" }) => {
+  const tileClassName = useCallback(({ date }: { date: Date; }) => {
     const isToday = date.toDateString() === new Date().toDateString();
     const hasBookings = getBookingsForDate(date).length > 0;
     return [
@@ -340,7 +340,7 @@ const BookingDetailsModal = ({
           </div>
         ) : (
           <div className="space-y-4 overflow-y-auto">
-            {selectedDateBookings.map((booking: Booking, idx: number) => (
+            {selectedDateBookings.map((booking: Booking) => (
               <div
                 key={booking.id}
                 className="bg-black/30 rounded-lg border border-purple-500/30 p-4"
