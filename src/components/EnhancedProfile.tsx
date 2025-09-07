@@ -47,6 +47,19 @@ interface ProfileData {
   profileImage?: string;
 }
 
+type EditData = {
+  fullname: string,
+  username: string,
+  dob: string,
+  phone: string
+}
+
+type TimestampInput = 
+  | string 
+  | { _seconds: number } 
+  | { seconds: number } 
+  | null 
+  | undefined;
 
 
 export default function EnhancedProfile() {
@@ -54,7 +67,7 @@ export default function EnhancedProfile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [editMode, setEditMode] = useState(false);
-  const [editData, setEditData] = useState<any>({});
+  const [editData, setEditData] = useState<EditData>({});
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("profile");
   const router = useRouter();
@@ -125,8 +138,10 @@ export default function EnhancedProfile() {
   };
 
   const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    /* Function handles the edit of fullname, username etc., which are defined in the EditData field.
+    */
     const { name, value } = e.target;
-    setEditData((prev: any) => ({ ...prev, [name]: value }));
+    setEditData((prev: EditData) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = async () => {
@@ -164,11 +179,18 @@ export default function EnhancedProfile() {
     }
   };
 
-  const formatDate = (ts: any) => {
+  const formatDate = (ts: TimestampInput): string => {
     if (!ts) return "-";
     if (typeof ts === "string") return new Date(ts).toLocaleDateString();
-    if (ts._seconds) return new Date(ts._seconds * 1000).toLocaleDateString();
-    if (ts.seconds) return new Date(ts.seconds * 1000).toLocaleDateString();
+  
+    if ("_seconds" in ts) {
+      return new Date(ts._seconds * 1000).toLocaleDateString();
+    }
+  
+    if ("seconds" in ts) {
+      return new Date(ts.seconds * 1000).toLocaleDateString();
+    }
+  
     return "-";
   };
 
