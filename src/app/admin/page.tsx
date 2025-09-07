@@ -26,6 +26,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { User as FirebaseUser } from "firebase/auth"
 
 export type UserProfile = {
   uid: string;
@@ -475,7 +476,7 @@ export default function AdminDashboard() {
   }, [bookings]);
 
   // Memoized profile fetch
-  const fetchProfileForUser = useCallback(async (user: any) => {
+  const fetchProfileForUser = useCallback(async (user: FirebaseUser) => {
     setLoading(true);
     try {
       const idToken = await user.getIdToken();

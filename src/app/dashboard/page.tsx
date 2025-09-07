@@ -12,9 +12,10 @@ import { onAuthStateChanged } from "firebase/auth";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
-// Importing Profiles
+// Importing types from admin page & firebase auth
 import type { UserProfile } from "@/app/admin/page"
 import type { Booking } from "@/app/admin/page"
+import type { User as FirebaseUser } from "firebase/auth";
 import {
   Star,
   Moon,
@@ -58,7 +59,7 @@ const MysticalBackground = () => (
   </div>
 );
 
-const MysticalHeader = ({ profile, onUpgrade, onLogout }: { profile: Profile; onUpgrade: () => void; onLogout: () => void }) => (
+const MysticalHeader = ({ profile, onUpgrade, onLogout }: { profile: UserProfile; onUpgrade: () => void; onLogout: () => void }) => (
   <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8 p-4 md:p-6 bg-black/20 backdrop-blur-md rounded-2xl border border-purple-500/30 shadow-2xl">
     <div className="flex items-center space-x-4">
       <Gem className="h-10 w-10 text-purple-300 animate-pulse" />
@@ -101,7 +102,7 @@ const MysticalHeader = ({ profile, onUpgrade, onLogout }: { profile: Profile; on
   </div>
 );
 
-const MysticalWelcome = ({ profile }: any) => (
+const MysticalWelcome = ({ profile }: { profile: UserProfile | null}) => (
   <div className="text-center mb-8 p-6 bg-black/20 backdrop-blur-md rounded-2xl border border-purple-500/30 shadow-2xl">
     <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent mb-2">
       Welcome Back,{" "}
@@ -113,7 +114,7 @@ const MysticalWelcome = ({ profile }: any) => (
   </div>
 );
 
-const NavigationCards = ({ router }: any) => (
+const NavigationCards = ({ router }: { router: ReturnType<typeof useRouter> }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
     <div className="relative group">
       <div
@@ -164,10 +165,10 @@ const NavigationCards = ({ router }: any) => (
 );
 
 // Memoized calendar component
-const BookingsCalendar = ({ bookings, onDateClick }: any) => {
-  const tileContent = useCallback(({ date, view }: any) => {
+const BookingsCalendar = ({ bookings, onDateClick }: { bookings: Booking[]; onDateClick: (date: Date) => void }) => {
+  const tileContent = useCallback(({ date, view }: { date: Date; view: "month" | "year" | "decade" | "century" }) => {
     if (view === "month") {
-      const count = bookings.filter((b: any) => {
+      const count = bookings.filter((b: Booking) => {
         if (!b.date) return false;
         const ymd = date.toISOString().slice(0, 10);
         return b.date.slice(0, 10) === ymd;
@@ -199,14 +200,14 @@ const BookingsCalendar = ({ bookings, onDateClick }: any) => {
 };
 
 export default function DashboardPage() {
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [bookings, setBookings] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const [bookingsLoading, setBookingsLoading] = useState(false);
   const [bookingsError, setBookingsError] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [modalBooking, setModalBooking] = useState<any | null>(null);
+  const [modalBooking, setModalBooking] = useState<Booking[] | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [rescheduleMode, setRescheduleMode] = useState(false);
   const [rescheduleDate, setRescheduleDate] = useState<Date | null>(null);
@@ -265,7 +266,7 @@ export default function DashboardPage() {
   }, [bookings]);
 
   // Memoized profile fetch
-  const fetchProfileForUser = useCallback(async (user: any) => {
+  const fetchProfileForUser = useCallback(async (user: FirebaseUser) => {
     setLoading(true);
     setError(null);
     try {
@@ -383,7 +384,7 @@ export default function DashboardPage() {
 
       <div className="max-w-6xl mx-auto relative z-10">
         <MysticalHeader 
-          profile={profile} 
+          profile={profile as UserProfile} 
           onUpgrade={handleUpgrade} 
           onLogout={handleLogout} 
         />
