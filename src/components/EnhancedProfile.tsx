@@ -20,7 +20,7 @@ import {
   Save,
   X,
   Camera,
-  Shield,
+  // Shield,
   Star,
   Clock,
   CheckCircle,
@@ -41,7 +41,7 @@ interface ProfileData {
   username: string;
   email: string;
   phone: string;
-  dob: string;
+  dob: string | { _seconds: number } | { seconds: number };
   createdAt: Timestamp;
   paymentPlan: string;
   profileImage?: string;
@@ -61,14 +61,19 @@ type TimestampInput =
   | null 
   | undefined;
 
-import TimeStamp from "firebase/firestore"
+// Removed incorrect import of Timestamp from firebase/firestore; not needed at runtime
 
 export default function EnhancedProfile() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [editMode, setEditMode] = useState(false);
-  const [editData, setEditData] = useState<EditData>({});
+  const [editData, setEditData] = useState<EditData>({
+    fullname: "",
+    username: "",
+    dob: "",
+    phone: "",
+  });
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("profile");
   const router = useRouter();
@@ -125,10 +130,13 @@ export default function EnhancedProfile() {
       setEditData({
         fullname: data.fullname || "",
         username: data.username || "",
-        dob:
-          data.dob && data.dob._seconds
-            ? format(new Date(data.dob._seconds * 1000), "yyyy-MM-dd")
-            : "",
+        dob: (() => {
+          const d = data.dob;
+          if (typeof d === "string") return d;
+          if (d && "_seconds" in d) return format(new Date(d._seconds * 1000), "yyyy-MM-dd");
+          if (d && "seconds" in d) return format(new Date(d.seconds * 1000), "yyyy-MM-dd");
+          return "";
+        })(),
         phone: data.phone || "",
       });
     } catch (err: unknown) {
@@ -180,7 +188,7 @@ export default function EnhancedProfile() {
     }
   };
 
-  const formatDate = (ts: typeof TimeStamp | TimestampInput) => {
+  const formatDate = (ts: TimestampInput) => {
     if (!ts) return "-";
     if (typeof ts === "string") return new Date(ts).toLocaleDateString();
   
@@ -195,31 +203,31 @@ export default function EnhancedProfile() {
     return "-";
   };
 
-  const getPlanBadge = (plan: string) => {
-    switch (plan?.toLowerCase()) {
-      case "premium":
-        return (
-          <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
-            <Crown className="w-3 h-3 mr-1" />
-            Premium
-          </Badge>
-        );
-      case "pro":
-        return (
-          <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-            <Star className="w-3 h-3 mr-1" />
-            Pro
-          </Badge>
-        );
-      default:
-        return (
-          <Badge variant="secondary">
-            <Shield className="w-3 h-3 mr-1" />
-            Free
-          </Badge>
-        );
-    }
-  };
+  // const getPlanBadge = (plan: string) => {
+  //   switch (plan?.toLowerCase()) {
+  //     case "premium":
+  //       return (
+  //         <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
+  //           <Crown className="w-3 h-3 mr-1" />
+  //           Premium
+  //         </Badge>
+  //       );
+  //     case "pro":
+  //       return (
+  //         <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+  //           <Star className="w-3 h-3 mr-1" />
+  //           Pro
+  //         </Badge>
+  //       );
+  //     default:
+  //       return (
+  //         <Badge variant="secondary">
+  //           <Shield className="w-3 h-3 mr-1" />
+  //           Free
+  //         </Badge>
+  //       );
+  //   }
+  // };
 
   const getInitials = (name: string) => {
     return (
@@ -454,13 +462,13 @@ export default function EnhancedProfile() {
                         setEditData({
                           fullname: profile?.fullname || "",
                           username: profile?.username || "",
-                          dob:
-                            profile?.dob && profile.dob._seconds
-                              ? format(
-                                  new Date(profile.dob._seconds * 1000),
-                                  "yyyy-MM-dd"
-                                )
-                              : "",
+                          dob: (() => {
+                            const d = profile?.dob as TimestampInput;
+                            if (typeof d === "string") return d;
+                            if (d && "_seconds" in d) return format(new Date(d._seconds * 1000), "yyyy-MM-dd");
+                            if (d && "seconds" in d) return format(new Date(d.seconds * 1000), "yyyy-MM-dd");
+                            return "";
+                          })(),
                           phone: profile?.phone || "",
                         });
                       } else {
