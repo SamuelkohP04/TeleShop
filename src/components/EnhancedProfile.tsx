@@ -78,8 +78,8 @@ export default function EnhancedProfile() {
       }
       const { url } = await res.json();
       window.location.href = url;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err as Error).message);
     } finally {
       setLoading(false);
     }
@@ -114,8 +114,8 @@ export default function EnhancedProfile() {
             : "",
         phone: data.phone || "",
       });
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err as Error).message);
     } finally {
       setLoading(false);
     }
@@ -154,8 +154,8 @@ export default function EnhancedProfile() {
       setSuccessMsg("Profile updated successfully!");
       setEditMode(false);
       fetchProfile();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err as Error).message);
     } finally {
       setLoading(false);
     }

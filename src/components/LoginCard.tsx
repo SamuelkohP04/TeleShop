@@ -135,10 +135,10 @@ function LoginCard() {
         setIsLogin(true); // Switch to login form
         return;
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast({
         title: "Authentication Error",
-        description: err.message,
+        description: (err as Error).message,
         variant: "destructive",
       });
     } finally {
@@ -235,8 +235,8 @@ function LoginCard() {
                     router.push("/dashboard");
                   }
                 }
-              } catch (err: any) {
-                let errorMessage = err.message;
+              } catch (err: unknown) {
+                let errorMessage = (err as Error).message;
                 
                 // Handle specific Google sign-in errors
                 if (err.code === 'auth/account-exists-with-different-credential') {

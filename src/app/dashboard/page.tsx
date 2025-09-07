@@ -237,8 +237,8 @@ export default function DashboardPage() {
       }
       const { url } = await res.json();
       window.location.href = url;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err as Error).message);
     } finally {
       setLoading(false);
     }
@@ -285,8 +285,8 @@ export default function DashboardPage() {
         dob: convertTimestamp(data.dob),
         createdAt: convertTimestamp(data.createdAt),
       });
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err as Error).message);
     } finally {
       setLoading(false);
     }
@@ -308,8 +308,8 @@ export default function DashboardPage() {
       }
       const data = await res.json();
       setBookings(data.bookings || []);
-    } catch (err: any) {
-      setBookingsError(err.message);
+    } catch (err: unknown) {
+      setBookingsError((err as Error).message);
     } finally {
       setBookingsLoading(false);
     }
@@ -511,8 +511,8 @@ const BookingModal = ({
       }
       setBookings(bookings.filter((b: any) => b.id !== booking.id));
       setShowModal(false);
-    } catch (err: any) {
-      setModalError(err.message);
+    } catch (err: unknown) {
+      setModalError((err as Error).message);
     } finally {
       setModalLoading(false);
     }
@@ -558,8 +558,8 @@ const BookingModal = ({
       setRescheduleModeLocal(false);
       setCalendarRescheduleDate(null);
       setRescheduleTimeSlot("");
-    } catch (err: any) {
-      setModalError(err.message);
+    } catch (err: unknown) {
+      setModalError((err as Error).message);
     } finally {
       setModalLoading(false);
     }

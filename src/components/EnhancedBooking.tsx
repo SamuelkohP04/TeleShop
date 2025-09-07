@@ -108,8 +108,8 @@ export default function EnhancedBooking() {
       }
       const { url } = await res.json();
       window.location.href = url;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err as Error).message);
     } finally {
       setLoading(false);
     }
