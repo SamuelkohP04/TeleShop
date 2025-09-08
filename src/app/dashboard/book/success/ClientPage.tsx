@@ -29,8 +29,8 @@ export default function BookingSuccessPage() {
           throw new Error(error || "Failed to create booking");
         }
         setSuccess(true);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError((err as Error).message);
       } finally {
         setLoading(false);
       }

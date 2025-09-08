@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Zap } from "lucide-react";
-import Image from "next/image";
+// import { Zap } from "lucide-react";
+// import Image from "next/image";
 
 const HeroSection = () => {
   return ( /*bg-[#212121]*/

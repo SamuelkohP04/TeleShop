@@ -30,8 +30,8 @@ export default function UpgradeSuccessPage() {
           throw new Error(error || "Failed to upgrade plan");
         }
         setSuccess(true);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError((err as Error).message);
       } finally {
         setLoading(false);
       }

@@ -20,7 +20,7 @@ import {
   Save,
   X,
   Camera,
-  Shield,
+  // Shield,
   Star,
   Clock,
   CheckCircle,
@@ -30,28 +30,50 @@ import {
   ArrowLeft,
   Gem,
   Moon,
-  Sun,
+  // Sun,
   Sparkles,
   Eye,
 } from "lucide-react";
+import { Timestamp } from "firebase-admin/firestore";
 
 interface ProfileData {
   fullname: string;
   username: string;
   email: string;
   phone: string;
-  dob: any;
-  createdAt: any;
+  dob: string | TimestampInput;
+  createdAt: Timestamp;
   paymentPlan: string;
   profileImage?: string;
 }
+
+interface  EditData {
+  fullname: string,
+  username: string,
+  dob: string,
+  phone: string
+}
+
+type TimestampInput = 
+  | string 
+  | { _seconds: number } 
+  | { seconds: number } 
+  | null 
+  | undefined;
+
+import TimeStamp from "firebase/firestore"
 
 export default function EnhancedProfile() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [editMode, setEditMode] = useState(false);
-  const [editData, setEditData] = useState<any>({});
+  const [editData, setEditData] = useState<EditData>({
+    fullname: "",
+    username: "",
+    dob: "",
+    phone: "",
+  });
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("profile");
   const router = useRouter();
@@ -78,8 +100,8 @@ export default function EnhancedProfile() {
       }
       const { url } = await res.json();
       window.location.href = url;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err as Error).message);
     } finally {
       setLoading(false);
     }
@@ -114,16 +136,18 @@ export default function EnhancedProfile() {
             : "",
         phone: data.phone || "",
       });
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err as Error).message);
     } finally {
       setLoading(false);
     }
   };
 
   const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    /* Function handles the edit of fullname, username etc., which are defined in the EditData field.
+    */
     const { name, value } = e.target;
-    setEditData((prev: any) => ({ ...prev, [name]: value }));
+    setEditData((prev: EditData) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = async () => {
@@ -154,46 +178,53 @@ export default function EnhancedProfile() {
       setSuccessMsg("Profile updated successfully!");
       setEditMode(false);
       fetchProfile();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError((err as Error).message);
     } finally {
       setLoading(false);
     }
   };
 
-  const formatDate = (ts: any) => {
+  const formatDate = (ts: typeof TimeStamp | TimestampInput) => {
     if (!ts) return "-";
     if (typeof ts === "string") return new Date(ts).toLocaleDateString();
-    if (ts._seconds) return new Date(ts._seconds * 1000).toLocaleDateString();
-    if (ts.seconds) return new Date(ts.seconds * 1000).toLocaleDateString();
+  
+    if ("_seconds" in ts) {
+      return new Date(ts._seconds * 1000).toLocaleDateString();
+    }
+  
+    if ("seconds" in ts) {
+      return new Date(ts.seconds * 1000).toLocaleDateString();
+    }
+  
     return "-";
   };
 
-  const getPlanBadge = (plan: string) => {
-    switch (plan?.toLowerCase()) {
-      case "premium":
-        return (
-          <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
-            <Crown className="w-3 h-3 mr-1" />
-            Premium
-          </Badge>
-        );
-      case "pro":
-        return (
-          <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-            <Star className="w-3 h-3 mr-1" />
-            Pro
-          </Badge>
-        );
-      default:
-        return (
-          <Badge variant="secondary">
-            <Shield className="w-3 h-3 mr-1" />
-            Free
-          </Badge>
-        );
-    }
-  };
+  // const getPlanBadge = (plan: string) => {
+  //   switch (plan?.toLowerCase()) {
+  //     case "premium":
+  //       return (
+  //         <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
+  //           <Crown className="w-3 h-3 mr-1" />
+  //           Premium
+  //         </Badge>
+  //       );
+  //     case "pro":
+  //       return (
+  //         <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+  //           <Star className="w-3 h-3 mr-1" />
+  //           Pro
+  //         </Badge>
+  //       );
+  //     default:
+  //       return (
+  //         <Badge variant="secondary">
+  //           <Shield className="w-3 h-3 mr-1" />
+  //           Free
+  //         </Badge>
+  //       );
+  //   }
+  // };
 
   const getInitials = (name: string) => {
     return (
@@ -428,13 +459,13 @@ export default function EnhancedProfile() {
                         setEditData({
                           fullname: profile?.fullname || "",
                           username: profile?.username || "",
-                          dob:
-                            profile?.dob && profile.dob._seconds
-                              ? format(
-                                  new Date(profile.dob._seconds * 1000),
-                                  "yyyy-MM-dd"
-                                )
-                              : "",
+                          dob: profile?.dob && typeof profile.dob === 'object' && 'seconds' in profile.dob
+                            ? format(new Date(profile.dob.seconds * 1000), "yyyy-MM-dd")
+                            : profile?.dob && typeof profile.dob === 'object' && '_seconds' in profile.dob
+                            ? format(new Date(profile.dob._seconds * 1000), "yyyy-MM-dd")
+                            : profile?.dob && typeof profile.dob === 'string'
+                            ? format(new Date(profile.dob), "yyyy-MM-dd")
+                            : "",
                           phone: profile?.phone || "",
                         });
                       } else {

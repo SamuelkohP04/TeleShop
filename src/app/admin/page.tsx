@@ -26,8 +26,10 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { User as FirebaseUser } from "firebase/auth"
+import { Timestamp } from "firebase/firestore";
 
-type UserProfile = {
+export type UserProfile = {
   uid: string;
   fullname: string;
   username: string;
@@ -38,15 +40,16 @@ type UserProfile = {
   isAdmin: boolean;
 };
 
-type Booking = {
+export type Booking = {
   id: string;
   uid: string;
   service: string;
   date: string;
   timeSlot: string;
   remarks: string;
-  createdAt: any;
+  createdAt: Timestamp;
   userProfile?: UserProfile;
+  consultationType?: string;
 };
 
 // Static components that don't need re-rendering
@@ -64,7 +67,7 @@ const MysticalBackground = () => (
   </div>
 );
 
-const MysticalAdminHeader = ({ profile, onLogout, router }: any) => (
+const MysticalAdminHeader = ({ onLogout, router }: { profile: UserProfile; onLogout: () => void | Promise<void>; router: ReturnType<typeof useRouter> }) => (
   <motion.div
     initial={{ opacity: 0, y: -20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -102,12 +105,12 @@ const MysticalAdminHeader = ({ profile, onLogout, router }: any) => (
   </motion.div>
 );
 
-const AdminStatsCards = ({ bookings }: any) => {
+const AdminStatsCards = ({ bookings }: { bookings: Booking[] }) => {
   // Memoized calculations
   const stats = useMemo(() => ({
     totalBookings: bookings.length,
-    uniqueClients: new Set(bookings.map((b: any) => b.uid)).size,
-    todaySessions: bookings.filter((b: any) => {
+    uniqueClients: new Set(bookings.map((b: Booking) => b.uid)).size,
+    todaySessions: bookings.filter((b: Booking) => {
       const today = new Date().toDateString();
       const bookingDate = new Date(b.date).toDateString();
       return bookingDate === today;
@@ -180,16 +183,16 @@ const AdminStatsCards = ({ bookings }: any) => {
 };
 
 // Memoized calendar component
-const AdminCalendar = ({ bookings, onDateClick, selectedDate }: any) => {
+const AdminCalendar = ({ bookings, onDateClick, selectedDate }: { bookings: Booking[]; onDateClick: (date: Date | null) => void; selectedDate: Date | null }) => {
   const getBookingsForDate = useCallback((date: Date) => {
     const dateStr = date.toDateString();
-    return bookings.filter((booking: any) => {
+    return bookings.filter((booking: Booking) => {
       const bookingDate = new Date(booking.date);
       return bookingDate.toDateString() === dateStr;
     });
   }, [bookings]);
 
-  const tileClassName = useCallback(({ date, view }: any) => {
+  const tileClassName = useCallback(({ date }: { date: Date; }) => {
     const isToday = date.toDateString() === new Date().toDateString();
     const hasBookings = getBookingsForDate(date).length > 0;
     return [
@@ -201,7 +204,7 @@ const AdminCalendar = ({ bookings, onDateClick, selectedDate }: any) => {
       .join(" ");
   }, [getBookingsForDate]);
 
-  const tileContent = useCallback(({ date, view }: any) => {
+  const tileContent = useCallback(({ date, view }: { date: Date; view: "month" | "year" | "decade" | "century" }) => {
     if (view === "month") {
       const count = getBookingsForDate(date).length;
       if (count > 0) {
@@ -276,8 +279,8 @@ const BookingDetailsModal = ({
   setShowModal, 
   setBookings, 
   setSelectedDateBookings 
-}: any) => {
-  const handleCompleteBooking = useCallback(async (booking: any) => {
+}: { showModal: boolean; selectedDate: Date | null; selectedDateBookings: Booking[]; setShowModal: (value: boolean) => void; setBookings: React.Dispatch<React.SetStateAction<Booking[]>>; setSelectedDateBookings: React.Dispatch<React.SetStateAction<Booking[]>> }) => {
+  const handleCompleteBooking = useCallback(async (booking: Booking) => {
     if (!window.confirm('Mark this booking as complete and remove? This action cannot be undone.')) return;
     
     try {
@@ -296,12 +299,12 @@ const BookingDetailsModal = ({
         const { error } = await res.json();
         throw new Error(error || 'Failed to remove booking');
       }
-      setBookings((bookings: any) => bookings.filter((b: any) => b.id !== booking.id));
-      setSelectedDateBookings((selectedDateBookings: any) => 
-        selectedDateBookings.filter((b: any) => b.id !== booking.id)
+      setBookings((bookings: Booking[]) => bookings.filter((b: Booking) => b.id !== booking.id));
+      setSelectedDateBookings((selectedDateBookings: Booking[]) => 
+        selectedDateBookings.filter((b: Booking) => b.id !== booking.id)
       );
-    } catch (err: any) {
-      alert(err.message || 'Error removing booking');
+    } catch (err: unknown) {
+      alert((err as Error).message || 'Error removing booking');
     }
   }, [setBookings, setSelectedDateBookings]);
 
@@ -337,7 +340,7 @@ const BookingDetailsModal = ({
           </div>
         ) : (
           <div className="space-y-4 overflow-y-auto">
-            {selectedDateBookings.map((booking: any, idx: number) => (
+            {selectedDateBookings.map((booking: Booking) => (
               <div
                 key={booking.id}
                 className="bg-black/30 rounded-lg border border-purple-500/30 p-4"
@@ -463,9 +466,9 @@ export default function AdminDashboard() {
     }
   }, [router]);
 
-  const handleDateClick = useCallback((date: Date) => {
+  const handleDateClick = useCallback((date: Date | null) => {
     const dayBookings = bookings.filter((booking) => {
-      const dateStr = date.toDateString();
+      const dateStr = date?.toDateString();
       const bookingDate = new Date(booking.date);
       return bookingDate.toDateString() === dateStr;
     });
@@ -475,7 +478,7 @@ export default function AdminDashboard() {
   }, [bookings]);
 
   // Memoized profile fetch
-  const fetchProfileForUser = useCallback(async (user: any) => {
+  const fetchProfileForUser = useCallback(async (user: FirebaseUser) => {
     setLoading(true);
     try {
       const idToken = await user.getIdToken();

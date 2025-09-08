@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
       isAdmin: false, // Default to false, can be manually changed in database
     });
     return NextResponse.json({ success: true }, { status: 201 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 401 });
+  } catch (error: unknown) {
+    return NextResponse.json({ error: (error as Error).message }, { status: 401 });
   }
 }

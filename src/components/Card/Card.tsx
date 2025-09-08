@@ -4,11 +4,11 @@
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
 
-import React, { useState } from "react";
-import { Col, Row } from 'react-bootstrap'; 
-import Card from 'react-bootstrap/Card';// ← All imports at top
-// import "./Card.css";
-import Button from 'react-bootstrap/Button';
+import React from "react";
+// import { Col, Row } from 'react-bootstrap'; 
+// import Card from 'react-bootstrap/Card';// ← All imports at top
+// // import "./Card.css";
+// import Button from 'react-bootstrap/Button';
 
 
 export interface ProductProps {
@@ -21,7 +21,7 @@ export interface ProductProps {
 }
 
 function ProductCard({ product }: ProductProps ) {
-  const { title, Image, price, id } = product;
+  const { title, Image, price } = product;
   
   return (
     <div className="w-full max-w-md mx-auto">

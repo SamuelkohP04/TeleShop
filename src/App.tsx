@@ -1,9 +1,13 @@
 // Import React and required hooks
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 declare global {
   interface Window {
-    Telegram: any;
+    Telegram: {
+      WebApp: {
+        ready: () => void;
+      }
+    };
   }
 }
 

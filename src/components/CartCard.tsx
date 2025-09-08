@@ -8,13 +8,13 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
+    // CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
 import { Product } from "@/types"; // Adjust the import path as necessary
 
-function CartCard({ product, setCart }: { product : Product, setCart: any }) {
+function CartCard({ product, setCart }: { product : Product, setCart: React.Dispatch<React.SetStateAction<Product[]>> }) {
     const [amount, setAmount] = useState<number>(product.amount);
 
     function handleAdd(): void {
@@ -27,7 +27,7 @@ function CartCard({ product, setCart }: { product : Product, setCart: any }) {
 
     useEffect(() => {
         if (amount <= 0) setCart((cart: Product[]) => cart.filter((cartProduct: Product) => cartProduct.id !== product.id));
-    }, [amount]);
+    }, [amount, product.id, setCart]);
 
     return (
         <Card className="w-full flex flex-col bg-neutral-100 border-0 rounded">
