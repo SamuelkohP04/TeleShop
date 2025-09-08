@@ -83,11 +83,23 @@ npm run build
 - Builds the app for production in the `.next` folder locally.
 Optimizes the build for NextJS.
 
+
 ```
-npm run preview
+flyctl auth login
 ```
-- Builds the app for production in the `.open-next` folder.  
-Optimizes the build for deployment for Cloudflare Workers.
+- Login to Fly.io's CLI on VSCode's terminal.
+
+```
+fly launch
+```
+- Launches the application while creating a Fly TOML file.
+
+```
+fly deploy
+```
+
+- Runs automated deployment checks, given the instructions from YAML, TOML & Dockerfile. Internally, it runs next build, then ESLint.
+- Puts the application onto Fly.io's servers.
 
 
 ## 🤝 Contributors
