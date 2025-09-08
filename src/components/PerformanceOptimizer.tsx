@@ -2,6 +2,28 @@
 
 import { useEffect, useState, ReactNode } from 'react';
 
+interface NavigatorMemory extends Navigator {
+  deviceMemory?: number;
+}
+
+interface NavigatorConnection extends Navigator {
+  connection?: {
+    effectiveType?: '4g' | '3g' | '2g' | 'slow-2g';
+  };
+}
+
+interface DeviceCapabilities {
+  deviceMemory?: number;
+  hardwareConcurrency?: number;
+  connection?: {
+    effectiveType?: string;
+  };
+}
+
+
+type ExtendedNavigator = NavigatorMemory & NavigatorConnection & DeviceCapabilities;
+
+
 interface PerformanceOptimizerProps {
   children: ReactNode;
   fallback?: ReactNode;
@@ -20,13 +42,13 @@ export default function PerformanceOptimizer({
     // Simple performance detection
     const detectPerformance = () => {
       // Check device memory (if available)
-      const memory = (navigator as any).deviceMemory || 4;
-      
+      const memory = (navigator as NavigatorMemory).deviceMemory || 4;
+
       // Check CPU cores (if available)
-      const cores = (navigator as any).hardwareConcurrency || 4;
+      const cores = (navigator as ExtendedNavigator).hardwareConcurrency || 4;
       
       // Check connection speed (if available)
-      const connection = (navigator as any).connection;
+      const connection = (navigator as NavigatorConnection).connection;
       const effectiveType = connection?.effectiveType || '4g';
       
       // Performance score calculation
@@ -91,9 +113,9 @@ export function usePerformanceMonitor() {
   });
 
   useEffect(() => {
-    const memory = (navigator as any).deviceMemory || 0;
-    const cores = (navigator as any).hardwareConcurrency || 0;
-    const connection = (navigator as any).connection;
+    const memory = (navigator as unknown as DeviceCapabilities).deviceMemory || 0;
+    const cores = (navigator as unknown as DeviceCapabilities).hardwareConcurrency || 0;
+    const connection = (navigator as unknown as DeviceCapabilities).connection;
     const effectiveType = connection?.effectiveType || 'unknown';
     
     // Calculate performance score
