@@ -41,13 +41,13 @@ interface ProfileData {
   username: string;
   email: string;
   phone: string;
-  dob: string | { _seconds: number } | { seconds: number };
+  dob: string | TimestampInput;
   createdAt: Timestamp;
   paymentPlan: string;
   profileImage?: string;
 }
 
-type EditData = {
+interface  EditData {
   fullname: string,
   username: string,
   dob: string,
@@ -61,7 +61,7 @@ type TimestampInput =
   | null 
   | undefined;
 
-// Removed incorrect import of Timestamp from firebase/firestore; not needed at runtime
+import TimeStamp from "firebase/firestore"
 
 export default function EnhancedProfile() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
@@ -130,13 +130,10 @@ export default function EnhancedProfile() {
       setEditData({
         fullname: data.fullname || "",
         username: data.username || "",
-        dob: (() => {
-          const d = data.dob;
-          if (typeof d === "string") return d;
-          if (d && "_seconds" in d) return format(new Date(d._seconds * 1000), "yyyy-MM-dd");
-          if (d && "seconds" in d) return format(new Date(d.seconds * 1000), "yyyy-MM-dd");
-          return "";
-        })(),
+        dob:
+          data.dob && data.dob._seconds
+            ? format(new Date(data.dob._seconds * 1000), "yyyy-MM-dd")
+            : "",
         phone: data.phone || "",
       });
     } catch (err: unknown) {
@@ -188,7 +185,7 @@ export default function EnhancedProfile() {
     }
   };
 
-  const formatDate = (ts: TimestampInput) => {
+  const formatDate = (ts: typeof TimeStamp | TimestampInput) => {
     if (!ts) return "-";
     if (typeof ts === "string") return new Date(ts).toLocaleDateString();
   
@@ -462,13 +459,13 @@ export default function EnhancedProfile() {
                         setEditData({
                           fullname: profile?.fullname || "",
                           username: profile?.username || "",
-                          dob: (() => {
-                            const d = profile?.dob as TimestampInput;
-                            if (typeof d === "string") return d;
-                            if (d && "_seconds" in d) return format(new Date(d._seconds * 1000), "yyyy-MM-dd");
-                            if (d && "seconds" in d) return format(new Date(d.seconds * 1000), "yyyy-MM-dd");
-                            return "";
-                          })(),
+                          dob: profile?.dob && typeof profile.dob === 'object' && 'seconds' in profile.dob
+                            ? format(new Date(profile.dob.seconds * 1000), "yyyy-MM-dd")
+                            : profile?.dob && typeof profile.dob === 'object' && '_seconds' in profile.dob
+                            ? format(new Date(profile.dob._seconds * 1000), "yyyy-MM-dd")
+                            : profile?.dob && typeof profile.dob === 'string'
+                            ? format(new Date(profile.dob), "yyyy-MM-dd")
+                            : "",
                           phone: profile?.phone || "",
                         });
                       } else {
