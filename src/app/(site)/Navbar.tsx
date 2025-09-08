@@ -6,20 +6,20 @@ import { useEffect, useState } from "react";
 //import { getGitHubStars } from "@/utils/github";
 
 export default function Navbar() {
-  const [stars, setStars] = useState<number | null>(null);
+  // const [stars, setStars] = useState<number | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const repo = "idee8/Awareness Living";
+  // const repo = "idee8/Awareness Living";
 
   useEffect(() => {
     //getGitHubStars(repo).then(setStars);
   }, []);
 
-  const formatStars = (count: number): string => {
-    if (count >= 1000) {
-      return `${(count / 1000).toFixed(1)}k`;
-    }
-    return count.toString();
-  };
+  // const formatStars = (count: number): string => {
+  //   if (count >= 1000) {
+  //     return `${(count / 1000).toFixed(1)}k`;
+  //   }
+  //   return count.toString();
+  // };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
