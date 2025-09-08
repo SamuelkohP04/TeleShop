@@ -5,6 +5,7 @@
   "scripts": {
     "start:bot": "ts-node src/bot.ts",
     "start:web": "next start",
+    "start": "next start -p 3000",
     "dev": "next dev",
     "build": "next build",
     "lint": "next lint",
