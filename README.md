@@ -94,3 +94,7 @@ Optimizes the build for deployment for Cloudflare Workers.
 - APandamonium1 (Software Developer - Bot Development)
 - lkn120305 (Software Developer)
 - Cheryl Neo (UI/UX Designer)
+
+## 🤝 Acknowledgements
+- JacTBB (For his help in troubleshooting build errors)
+- ZackKoh (For his useful advice during the critical stages of development)
