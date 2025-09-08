@@ -18,25 +18,29 @@ Click [here](https://app.diagrams.net/?src=about#G1Bc7YP-3i8AsA31N5bOQry-a5MI5n7
 
 #### Front-End:
 - React
-- ESLint
 - Tailwind CSS
 - ShadCn
 
 #### Backend:
-- Node/Express JS
+- ESLint (Type Checks during development)
+- Node/ExpressJS
+- NextJS (Uses React)
 - Stripe (Using Stripe CLI for Local Development)
 - Telegraf (Telegram Bot Framework)
+- Dockerfile (Used for deployment)
 
 #### Database & Production:
 - Firebase Libraries
     - Firebase-REST-Firestore (View documentation [here](https://github.com/nabettu/firebase-rest-firestore))
     - Firebase-Auth-Cloudflare-Workers (View documentation [here](https://www.npmjs.com/package/firebase-auth-cloudflare-workers?activeTab=readme#run-example-code))
-- Cloudflare Workers (View documentation [here](https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs/))
+- Fly.io (View documentation [here](https://fly.io/docs/launch/deploy/))
 
 #### Other Development Tools Used:
 - Jira (Project Management)
 - CodeRabbit (AI Code Reviewer upon Pull Request) (View Documentation [here](https://www.coderabbit.ai/))
 - GitHub Copilot (Code Suggestions)
+- Cursor (For assistance in fixing type errors)
+- Draw.io (For drawing technical diagrams, such as technical architecture, diagrams for types in TypeScript, etc.)
   
 ---
 
