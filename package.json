@@ -9,10 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "lint": "next lint",
-    "eject": "react-scripts eject",
-    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+    "eject": "react-scripts eject"
   },
   "dependencies": {
     "@hono/firebase-auth": "^1.4.2",

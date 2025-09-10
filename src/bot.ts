@@ -56,7 +56,7 @@ bot.command('book', (ctx) => {
           {
             text: '✅ Yes, take me there!',
             web_app: {
-              url: 'https://p6zlt81q-3000.asse.devtunnels.ms/login'
+              url: 'https://teleshop.fly.dev/login'
             }
           },
           {
@@ -81,7 +81,7 @@ bot.on(message('text'), async (ctx) => {
           {
             text: '✅ Yes, take me there!',
             web_app: {
-              url: 'https://p6zlt81q-3000.asse.devtunnels.ms/login' // Replace with your actual web app URL
+              url: 'https://teleshop.fly.dev/login' // Replace with your actual web app URL
             }
           },
           {
