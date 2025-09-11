@@ -10,7 +10,7 @@ export default function Footer() {
         {/* Right-aligned nav */}
         <nav className="mr-4 flex gap-4 text-zinc-400">
           <a href="/faq" className="hover:text-white transition">About</a>
-          <a href="/membership" className="hover:text-white transition">Features</a>
+          <a href="/services" className="hover:text-white transition">Services</a>
           <a href="/Documents/Terms and Conditions Awareness Living.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Terms</a>
           <a href="/Documents/Privacy Policy Awareness Living.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Privacy</a>
         </nav>

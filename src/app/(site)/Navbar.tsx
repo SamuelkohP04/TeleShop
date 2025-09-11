@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Leaf, X } from "lucide-react";
+import Image from "next/image";
+import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 //import { getGitHubStars } from "@/utils/github";
 
@@ -30,12 +31,13 @@ export default function Navbar() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2">
-          <Leaf
-            className="h-10 w-10"
-            fill="#76C893"        // a nice green shade
-            stroke="black"
-            strokeWidth={1.4}
-          />
+          <Image
+              src="/favicon.ico"
+              alt="Awareness Living Logo"
+              width={40}
+              height={40}
+              className="h-10 w-10"
+            />
             <span className="text-lg font-semibold text-white">
               Awareness Living
             </span>
@@ -50,7 +52,7 @@ export default function Navbar() {
             About
           </Link>
           <Link
-            href="/membership"
+            href="/services"
             className="text-base text-white/90 transition hover:text-white"
           >
             Features
@@ -125,7 +127,7 @@ export default function Navbar() {
             About
           </Link>
           <Link
-            href="/membership"
+            href="/services"
             className="text-base text-white/90 transition hover:text-white"
             onClick={toggleMenu}
           >
