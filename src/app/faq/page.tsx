@@ -26,7 +26,7 @@ const FAQ_DATA = [
     value: "faq-3",
     question: "Do you use AI in your tarot cards readings?",
     answer:
-      "Here at Awareness Living House, we are sure that tarot reading can't be done by AI. Tarot readings go beyond the cards – they are about a connection that involves great trust and instant wisdom. As much as AI can enhance comprehension of card meanings, it cannot be said to replace intuition.",
+      "Here at Awareness Living, we are sure that tarot reading can't be done by AI. Tarot readings go beyond the cards – they are about a connection that involves great trust and instant wisdom. As much as AI can enhance comprehension of card meanings, it cannot be said to replace intuition.",
   },
 ] as const;
 
@@ -209,11 +209,18 @@ export default function FAQContactPage() {
         {/* Static FAQ Section */}
         <section className="w-full max-w-5xl pt-14">
           <h1 className="text-4xl font-bold text-center mb-4 text-white">
-            Frequently Asked Questions (FAQ)
+            Frequently Asked Questions (FAQ) ❓ 
           </h1>
+          
           <p className="text-lg text-white text-center mb-10 max-w-2xl mx-auto">
-            Here are some of the Frequently Asked Questions regarding Tarot Cards and our services.
+            Here are some of the Frequently Asked Questions regarding Tarot Cards and our services. We have compiled
+            this list to help you understand how we can support you on your journey of self discovery and growth. 
           </p>
+
+          <p className="text-lg text-white text-center mb-10 max-w-2xl mx-auto">
+            We believe that a deeper connection to oneself should be accessible to everyone. 🌱
+          </p>
+
           <Accordion.Root type="single" collapsible className="space-y-4">
             {FAQ_DATA.map((faq) => (
               <FAQItem key={faq.value} faq={faq} />

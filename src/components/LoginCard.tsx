@@ -160,7 +160,7 @@ function LoginCard() {
       <Card className="w-full max-w-md flex flex-col bg-slate-100 border-0 rounded p-4 gap-4 opacity-90 shadow-md">
         <CardHeader>
           <div className="flex flex-col items-center text-center gap-2">
-            <h1 className="text-4xl font-bold">🌱 Awareness Living</h1>
+            <h1 className="text-4xl font-bold">💧 Awareness Living</h1>
             <h1 className="text-2xl font-semibold">{isLogin ? "Login" : "Register"}</h1>
           </div>
         </CardHeader>
