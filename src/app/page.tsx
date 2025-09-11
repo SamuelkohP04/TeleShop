@@ -1,11 +1,11 @@
 import { Metadata } from "next";
-import CTA from "@/app/(site)/Cta";
-import FeaturedTime from "@/app/(site)/FeaturedTime";
+// import CTA from "@/app/(site)/Cta";
+// import FeaturedTime from "@/app/(site)/FeaturedTime";
 import Footer from "@/app/(site)/Footer";
 import HeroSection from "@/app/(site)/Hero";
-import MakerIntro from "@/app/(site)/MakerIntro";
+// import MakerIntro from "@/app/(site)/MakerIntro";
 import Navbar from "@/app/(site)/Navbar";
-import TestimonialsPage from "@/app/(site)/Testimonials";
+// import TestimonialsPage from "@/app/(site)/Testimonials";
 import InteractiveSections from "@/components/InteractiveSections";
 
 export const metadata: Metadata = {

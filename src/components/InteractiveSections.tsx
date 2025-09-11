@@ -15,10 +15,10 @@ const MakerIntro = dynamic(() => import('@/app/(site)/MakerIntro'), {
   ssr: true,
 });
 
-const TestimonialsPage = dynamic(() => import('@/app/(site)/Testimonials'), {
-  loading: () => <LoadingPlaceholder />,
-  ssr: true,
-});
+// const TestimonialsPage = dynamic(() => import('@/app/(site)/Testimonials'), {
+//   loading: () => <LoadingPlaceholder />,
+//   ssr: true,
+// });
 
 const CTA = dynamic(() => import('@/app/(site)/Cta'), {
   loading: () => <LoadingPlaceholder />,
@@ -49,9 +49,9 @@ export default function InteractiveSections() {
       </FadeInSection>
 
       {/* Testimonials Section */}
-      <FadeInSection>
+      {/* <FadeInSection>
         <TestimonialsPage />
-      </FadeInSection>
+      </FadeInSection> */}
 
       {/* Call to Action Section */}
       <FadeInSection>
