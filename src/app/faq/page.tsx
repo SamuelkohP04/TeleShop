@@ -35,15 +35,31 @@ const CONTACT_INFO = {
   phone: "+65 9386 2198",
   email: "awarenesslivingofficial@gmail.com",
   socialLinks: [
-    { name: "X", url: "https://x.com/", className: "hover:text-blue-300 underline" },
-    { name: "Instagram", url: "https://instagram.com/", className: "hover:text-pink-400 underline" },
-    { name: "Discord", url: "https://discord.gg/", className: "hover:text-indigo-400 underline" },
-    { name: "Telegram", url: "https://t.me/AwarenessSchedulerBot", className: "hover:text-sky-400 underline" },
+    {
+      name: "X",
+      url: "https://x.com/",
+      className: "hover:text-blue-300 underline",
+    },
+    {
+      name: "Instagram",
+      url: "https://instagram.com/",
+      className: "hover:text-pink-400 underline",
+    },
+    {
+      name: "Discord",
+      url: "https://discord.gg/",
+      className: "hover:text-indigo-400 underline",
+    },
+    {
+      name: "Telegram",
+      url: "https://t.me/AwarenessSchedulerBot",
+      className: "hover:text-sky-400 underline",
+    },
   ],
 } as const;
 
 // Memoized FAQ item component for better performance
-const FAQItem = memo(({ faq }: { faq: typeof FAQ_DATA[number] }) => (
+const FAQItem = memo(({ faq }: { faq: (typeof FAQ_DATA)[number] }) => (
   <Accordion.Item
     value={faq.value}
     className="rounded-xl shadow-md border border-gray-200 bg-white/80 p-4"
@@ -54,11 +70,13 @@ const FAQItem = memo(({ faq }: { faq: typeof FAQ_DATA[number] }) => (
         <ChevronDownIcon className="transition-transform duration-200 data-[state=open]:rotate-180" />
       </Accordion.Trigger>
     </Accordion.Header>
-    <Accordion.Content className="pt-2 text-gray-700">{faq.answer}</Accordion.Content>
+    <Accordion.Content className="pt-2 text-gray-700">
+      {faq.answer}
+    </Accordion.Content>
   </Accordion.Item>
 ));
 
-FAQItem.displayName = 'FAQItem';
+FAQItem.displayName = "FAQItem";
 
 // Memoized contact info component
 const ContactInfo = memo(() => (
@@ -102,51 +120,55 @@ const ContactInfo = memo(() => (
   </div>
 ));
 
-ContactInfo.displayName = 'ContactInfo';
+ContactInfo.displayName = "ContactInfo";
 
 // Memoized form input component
-const FormInput = memo(({ 
-  label, 
-  name, 
-  type, 
-  value, 
-  onChange, 
-  required = false 
-}: {
-  label: string;
-  name: string;
-  type: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  required?: boolean;
-}) => (
-  <div>
-    <label className="block text-sm font-medium text-white">
-      {label} {required && <span className="text-red-400">*</span>}
-    </label>
-    {type === 'textarea' ? (
-      <textarea
-        name={name}
-        rows={4}
-        value={value}
-        onChange={onChange}
-        required={required}
-        className="mt-1 w-full border rounded-md p-2 bg-white/90 text-black"
-      />
-    ) : (
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        required={required}
-        className="mt-1 w-full border rounded-md p-2 bg-white/90 text-black"
-      />
-    )}
-  </div>
-));
+const FormInput = memo(
+  ({
+    label,
+    name,
+    type,
+    value,
+    onChange,
+    required = false,
+  }: {
+    label: string;
+    name: string;
+    type: string;
+    value: string;
+    onChange: (
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => void;
+    required?: boolean;
+  }) => (
+    <div>
+      <label className="block text-sm font-medium text-white">
+        {label} {required && <span className="text-red-400">*</span>}
+      </label>
+      {type === "textarea" ? (
+        <textarea
+          name={name}
+          rows={4}
+          value={value}
+          onChange={onChange}
+          required={required}
+          className="mt-1 w-full border rounded-md p-2 bg-white/90 text-black"
+        />
+      ) : (
+        <input
+          type={type}
+          name={name}
+          value={value}
+          onChange={onChange}
+          required={required}
+          className="mt-1 w-full border rounded-md p-2 bg-white/90 text-black"
+        />
+      )}
+    </div>
+  )
+);
 
-FormInput.displayName = 'FormInput';
+FormInput.displayName = "FormInput";
 
 export default function FAQContactPage() {
   const [form, setForm] = useState({
@@ -158,67 +180,74 @@ export default function FAQContactPage() {
     message: "",
   });
 
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
+    "idle"
+  );
 
   // Memoized change handler for better performance
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  }, []);
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    },
+    []
+  );
 
   // Memoized submit handler
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus("sending");
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      setStatus("sending");
 
-    try {
-      const res = await fetch("https://formspree.io/f/mpwlyvqn", {
-        method: "POST",
-        headers: { Accept: "application/json" },
-        body: JSON.stringify(form),
-      });
-
-      if (res.ok) {
-        setStatus("sent");
-        setForm({
-          firstName: "",
-          lastName: "",
-          email: "",
-          phone: "",
-          subject: "",
-          message: "",
+      try {
+        const res = await fetch("https://formspree.io/f/mpwlyvqn", {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: JSON.stringify(form),
         });
-      } else throw new Error("Email failed");
-    } catch (err) {
-      console.error(err);
-      setStatus("error");
-    }
-  }, [form]);
+
+        if (res.ok) {
+          setStatus("sent");
+          setForm({
+            firstName: "",
+            lastName: "",
+            email: "",
+            phone: "",
+            subject: "",
+            message: "",
+          });
+        } else throw new Error("Email failed");
+      } catch (err) {
+        console.error(err);
+        setStatus("error");
+      }
+    },
+    [form]
+  );
 
   return (
     <div className="relative min-h-screen bg-transparent flex flex-col">
-      {/* Static background - no hydration needed */}
-      <div 
-        className="fixed top-0 left-0 w-full h-full -z-10 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url(/LandingPage/LandingBackground.jpg)" }}
-      />
+      {/* Fixed background gradient */}
+      <div className="fixed inset-0 bg-gradient-to-r from-[#9921e8] to-[#5f72be] -z-10" />
 
-      {/* Static navigation - no hydration needed */}
       <Navbar />
-      
+
       <main className="flex-1 w-full flex flex-col gap-16 items-center py-12 px-6">
         {/* Static FAQ Section */}
         <section className="w-full max-w-5xl pt-14">
           <h1 className="text-4xl font-bold text-center mb-4 text-white">
-            Frequently Asked Questions (FAQ) ❓ 
+            Frequently Asked Questions (FAQ) ❓
           </h1>
-          
+
           <p className="text-lg text-white text-center mb-10 max-w-2xl mx-auto">
-            Here are some of the Frequently Asked Questions regarding Tarot Cards and our services. We have compiled
-            this list to help you understand how we can support you on your journey of self discovery and growth. 
+            Here are some of the Frequently Asked Questions regarding Tarot
+            Cards and our services. We have compiled this list to help you
+            understand how we can support you on your journey of self discovery
+            and growth.
           </p>
 
           <p className="text-lg text-white text-center mb-10 max-w-2xl mx-auto">
-            We believe that a deeper connection to oneself should be accessible to everyone. 🌱
+            We believe that a deeper connection to oneself should be accessible
+            to everyone. 🌱
           </p>
 
           <Accordion.Root type="single" collapsible className="space-y-4">
@@ -297,7 +326,7 @@ export default function FAQContactPage() {
               onChange={handleChange}
               required
             />
-            
+
             <Button
               type="submit"
               disabled={status === "sending"}
@@ -320,19 +349,26 @@ export default function FAQContactPage() {
             </Button>
 
             {/* Progressive enhancement feedback */}
-            {status === "sent" && <p className="text-green-400">Message sent successfully!</p>}
-            {status === "error" && <p className="text-red-400">Something went wrong. Try again later.</p>}
-            
+            {status === "sent" && (
+              <p className="text-green-400">Message sent successfully!</p>
+            )}
+            {status === "error" && (
+              <p className="text-red-400">
+                Something went wrong. Try again later.
+              </p>
+            )}
+
             {/* Fallback for users without JavaScript */}
             <noscript>
               <p className="text-yellow-400 text-sm mt-2">
-                JavaScript is required for this form to work. Please enable it or contact us directly.
+                JavaScript is required for this form to work. Please enable it
+                or contact us directly.
               </p>
             </noscript>
           </form>
         </section>
       </main>
-      
+
       {/* Static footer - no hydration needed */}
       <Footer />
     </div>
