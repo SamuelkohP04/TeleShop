@@ -1,4 +1,4 @@
-import Link from "next/link";
+// import Link from "next/link";
 // import { Zap } from "lucide-react";
 // import Image from "next/image";
 
@@ -46,8 +46,8 @@ const HeroSection = () => {
         </div>
         <div className="w-full lg:w-2/5 flex justify-center lg:justify-end">
           <img
-            src="/LandingPage/TarotCardsAnimation.gif"
-            alt="Animated GIF"
+            src="/LandingPage/TarotCards.png"
+            alt="Tarot Cards"
             className="w-full max-w-md lg:max-w-full h-auto"
           />
         </div>
