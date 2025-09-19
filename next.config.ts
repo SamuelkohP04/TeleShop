@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
     // Skip type checking during builds
     ignoreBuildErrors: true,
   },
-  telemetry: false,
+  // telemetry: false,
 };
 
 // const path = require('path');

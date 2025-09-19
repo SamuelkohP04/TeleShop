@@ -15,13 +15,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="relative bg-black/20">
-      <img
-        src="/LandingPage/LandingBackground.jpg"
-        alt="Background"
-        className="fixed top-0 left-0 w-full h-full object-cover z-[-1]"
-        loading="eager" // Load immediately for better UX
-      />
+    <div className="fixed inset-0 bg-gradient-to-r from-[#9921e8] to-[#5f72be] -z-10">
 
       <div>
         <Navbar />
