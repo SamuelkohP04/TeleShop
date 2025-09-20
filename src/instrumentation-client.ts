@@ -6,7 +6,7 @@
 import * as Sentry from "@sentry/nextjs";
 
 Sentry.init({
-  dsn: process.env.SENTRY_DSN,
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
   integrations: [
       Sentry.feedbackIntegration({
         // Additional SDK configuration goes in here, for example:
@@ -14,12 +14,14 @@ Sentry.init({
         autoInject: true,
 
         buttonProps: {
-        size: "medium", // "small", "medium", or "large"  
+        size: "small", // "small", "medium", or "large"  
       },
       }),
     ],
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
   debug: false,
 });
+
+console.log("Sentry edge config loaded");
 
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
