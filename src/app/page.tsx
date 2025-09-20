@@ -7,6 +7,7 @@ import HeroSection from "@/app/(site)/Hero";
 import Navbar from "@/app/(site)/Navbar";
 // import TestimonialsPage from "@/app/(site)/Testimonials";
 import InteractiveSections from "@/components/InteractiveSections";
+import ReportBugFeedbackForm from "@/app/feedback_form";
 
 export const metadata: Metadata = {
   title: "Awareness Living",
@@ -27,6 +28,7 @@ export default function HomePage() {
         <HeroSection />
         <InteractiveSections />
         <Footer />
+        <ReportBugFeedbackForm />
       </div>
     </div>
   );

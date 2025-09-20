@@ -18,7 +18,7 @@ export default function MakerIntro() {
 <div className="bg-opacity-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
       <h2 className="text-3xl font-bold text-white mb-10 text-center">
-        Categories 🔮
+        Services Offered 🔮
       </h2>
 
 

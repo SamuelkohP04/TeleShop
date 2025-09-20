@@ -30,7 +30,7 @@ const SERVICES = [
   {
     id: "tarot",
     title: "Tarot Card",
-    price: "$68",
+    price: "$68.00",
     duration: "45 minutes",
     features: [
       "Personal guidance",
@@ -42,7 +42,7 @@ const SERVICES = [
   {
     id: "numerology",
     title: "Numerology",
-    price: "$68",
+    price: "$68.00",
     duration: "45 minutes",
     features: [
       "Life path analysis",
@@ -54,7 +54,7 @@ const SERVICES = [
   {
     id: "bundle",
     title: "Tarot Card + Numerology",
-    price: "$118",
+    price: "$118.00",
     duration: "45 minutes",
     features: [
       "Comprehensive reading",
@@ -66,7 +66,7 @@ const SERVICES = [
   {
     id: "wedding",
     title: "Auspicious Wedding Date",
-    price: "$88",
+    price: "$88.00",
     duration: "45 minutes",
     features: [
       "Date selection",
