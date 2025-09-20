@@ -227,8 +227,13 @@ export default function FAQContactPage() {
   return (
     <div className="relative min-h-screen bg-transparent flex flex-col">
       {/* Fixed background gradient */}
-      <div className="fixed inset-0 bg-gradient-to-r from-[#9921e8] to-[#5f72be] -z-10" />
-
+      <div className="relative bg-black/20"/>
+      <img
+        src="/LandingPage/LandingBackground.jpg"
+        alt="Background"
+        className="fixed top-0 left-0 w-full h-full object-cover z-[-1]"
+        loading="eager" // Load immediately for better UX
+      />
       <Navbar />
 
       <main className="flex-1 w-full flex flex-col gap-16 items-center py-12 px-6">

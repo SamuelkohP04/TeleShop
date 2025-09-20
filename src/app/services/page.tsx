@@ -118,7 +118,13 @@ ServiceCard.displayName = 'ServiceCard';
 // Static page component - no client-side hydration needed
 export default function MembershipPage() {
   return (
-    <div className="fixed inset-0 bg-gradient-to-r from-[#9921e8] to-[#5f72be] -z-10">
+    <div className="relative bg-black/20">
+      <img
+        src="/LandingPage/LandingBackground.jpg"
+        alt="Background"
+        className="fixed top-0 left-0 w-full h-full object-cover z-[-1]"
+        loading="eager" // Load immediately for better UX
+      />
       {/* Static background image - no hydration needed */}
 
       {/* Static navigation - no hydration needed */}

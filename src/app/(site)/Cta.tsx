@@ -8,26 +8,31 @@ export default function CTA() {
         <p className="mb-8 text-lg text-gray-200 md:text-xl">
           Book a consultation session now!
         </p>
-        <a
-          href="/login"               /* update as needed */
-          className="inline-flex items-center gap-2 rounded-lg bg-gray-200 px-6 py-3 text-base font-medium text-black transition-colors hover:bg-gray-200/90"
-        >
-          Book&nbsp;Now
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            className="h-5 w-5"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M5 12h14M12 5l7 7-7 7"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </a>
+        <div className="inline-flex mt-5 items-center justify-center gap-2 bg-gray-500 text-gray-300 px-8 sm:px-20 py-3 rounded-xl font-medium text-lg mb-6 cursor-not-allowed opacity-60 pointer-events-none">
+            Book with Bot (Coming Soon)!
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              className="w-5 h-5"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 6v6l4 2"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="2"
+                fill="none"
+              />
+            </svg>
+          </div>
       </div>
     </section>
   );
