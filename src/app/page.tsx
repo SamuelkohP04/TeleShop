@@ -7,16 +7,16 @@ import HeroSection from "@/app/(site)/Hero";
 import Navbar from "@/app/(site)/Navbar";
 // import TestimonialsPage from "@/app/(site)/Testimonials";
 import InteractiveSections from "@/components/InteractiveSections";
-import ReportBugFeedbackForm from "@/app/feedback_form";
 
 export const metadata: Metadata = {
   title: "Awareness Living",
-  description: "Your journey to self-discovery starts here with Tarot readings and Numerology consultations",
+  description:
+    "Your journey to self-discovery starts here with Tarot readings and Numerology consultations",
 };
 
 export default function HomePage() {
   return (
-      <div className="relative bg-black/20">
+    <div className="relative bg-black/20">
       <img
         src="/LandingPage/LandingBackground.jpg"
         alt="Background"
@@ -28,9 +28,7 @@ export default function HomePage() {
         <HeroSection />
         <InteractiveSections />
         <Footer />
-        <ReportBugFeedbackForm />
       </div>
     </div>
   );
 }
-
