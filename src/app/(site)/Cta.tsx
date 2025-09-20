@@ -1,6 +1,6 @@
 export default function CTA() {
   return (
-    <section className="relative bg-green-600 px-4 py-24 md:py-32">
+    <section className="text-gray-300 py-16 px-4 sm:px-6 md:px-8 bg-opacity-30">
       <div className="mx-auto max-w-3xl text-center">
         <h2 className="mb-4 text-4xl font-medium tracking-tight text-gray-200 md:text-5xl lg:text-6xl">
           Get Aware with Awareness Living
